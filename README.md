@@ -1,1 +1,1 @@
-# -oenstrike-monorepo
+# penstrike-monorepo
