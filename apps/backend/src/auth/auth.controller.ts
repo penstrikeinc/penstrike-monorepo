@@ -8,7 +8,7 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { AuthService, JwtPayloadReturnType } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { Users } from 'src/users/entities/user.entity';
 import { AuthGuard } from './auth.guard';
@@ -19,7 +19,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('/login')
-  login(@Body() loginUserDto: CreateAuthDto) {
+  login(@Body() loginUserDto: CreateAuthDto): Promise<JwtPayloadReturnType> {
     return this.authService.login(loginUserDto);
   }
 

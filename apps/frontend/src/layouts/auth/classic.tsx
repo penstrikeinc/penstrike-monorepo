@@ -6,7 +6,7 @@ import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 // auth
-import { useAuthContext } from 'src/auth/hooks';
+
 // routes
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
@@ -16,6 +16,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 import { bgGradient } from 'src/theme/css';
 // components
 import Logo from 'src/components/logo';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +24,7 @@ const METHODS = [
   {
     id: 'jwt',
     label: 'Jwt',
-    path: paths.auth.jwt.login,
+    path: paths.auth.login,
     icon: '/assets/icons/auth/ic_jwt.svg',
   },
 ];

@@ -18,12 +18,12 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
-      "jsx": true
+      "jsx": true,
     },
     "ecmaVersion": "latest",
     "sourceType": "module",
-    "project": "./tsconfig.json",
-    "warnOnUnsupportedTypeScriptVersion": false
+    "project": true,
+    "warnOnUnsupportedTypeScriptVersion": false,
   },
   "settings": {
     "import/resolver": {

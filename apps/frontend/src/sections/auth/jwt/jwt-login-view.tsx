@@ -25,6 +25,8 @@ import { useAuthContext } from 'src/auth/hooks';
 // components
 import Iconify from 'src/components/iconify';
 import { FormProvider, RHFTextField } from 'src/components/hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 // ----------------------------------------------------------------------
 
@@ -41,18 +43,18 @@ export default function JwtLoginView() {
 
   const password = useBoolean();
 
-  const LoginSchema = Yup.object().shape({
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    password: Yup.string().required('Password is required'),
+  const LoginSchema = z.object({
+    email: z.string().email('Email must be a valid email address'),
+    password: z.string().min(1, 'Password is required'),
   });
 
   const defaultValues = {
-    email: 'demo@minimals.cc',
-    password: 'demo1234',
+    email: 'a@a.com',
+    password: '12345',
   };
 
   const methods = useForm({
-    resolver: yupResolver(LoginSchema),
+    resolver: zodResolver(LoginSchema),
     defaultValues,
   });
 
@@ -64,7 +66,7 @@ export default function JwtLoginView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await login?.(data.email, data.password);
+      await login(data.email, data.password);
 
       router.push(returnTo || PATH_AFTER_LOGIN);
     } catch (error) {
@@ -80,8 +82,7 @@ export default function JwtLoginView() {
 
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2">New user?</Typography>
-
-        <Link component={RouterLink} href={paths.auth.jwt.register} variant="subtitle2">
+        <Link component={RouterLink} href={paths.auth.register} variant="subtitle2">
           Create an account
         </Link>
       </Stack>

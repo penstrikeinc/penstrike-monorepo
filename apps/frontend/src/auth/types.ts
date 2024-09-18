@@ -1,4 +1,6 @@
 import { LogoutOptions, RedirectLoginOptions, PopupLoginOptions } from '@auth0/auth0-react';
+import { TRegister } from 'src/schemas';
+import { IUser } from 'src/types';
 
 // ----------------------------------------------------------------------
 
@@ -13,7 +15,7 @@ export type ActionMapType<M extends { [index: string]: any }> = {
       };
 };
 
-export type AuthUserType = null | Record<string, any>;
+export type AuthUserType = IUser | null;
 
 export type AuthStateType = {
   status?: string;
@@ -25,12 +27,7 @@ export type AuthStateType = {
 
 type CanRemove = {
   login?: (email: string, password: string) => Promise<void>;
-  register?: (
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string
-  ) => Promise<void>;
+  register?: (params: RegisterParamsType) => Promise<void>;
   //
   loginWithGoogle?: () => Promise<void>;
   loginWithGithub?: () => Promise<void>;
@@ -45,6 +42,11 @@ type CanRemove = {
   newPassword?: (email: string, code: string, password: string) => Promise<void>;
 };
 
+export type RegisterParamsType = {
+  payload: TRegister;
+  onSuccess: () => void;
+};
+
 export type JWTContextType = CanRemove & {
   user: AuthUserType;
   method: string;
@@ -52,7 +54,7 @@ export type JWTContextType = CanRemove & {
   authenticated: boolean;
   unauthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
+  register: (params: RegisterParamsType) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -68,7 +70,7 @@ export type FirebaseContextType = CanRemove & {
   loginWithTwitter: () => Promise<void>;
   forgotPassword?: (email: string) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
+  register: (params: RegisterParamsType) => Promise<void>;
 };
 
 export type AmplifyContextType = CanRemove & {
@@ -78,12 +80,8 @@ export type AmplifyContextType = CanRemove & {
   authenticated: boolean;
   unauthenticated: boolean;
   login: (email: string, password: string) => Promise<unknown>;
-  register: (
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string
-  ) => Promise<unknown>;
+  register?: (params: RegisterParamsType) => Promise<void>;
+
   logout: () => Promise<unknown>;
   confirmRegister: (email: string, code: string) => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;

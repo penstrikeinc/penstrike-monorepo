@@ -1,3 +1,4 @@
+import { IUser } from './../../../frontend/src/types/user';
 import {
   BadRequestException,
   Injectable,
@@ -8,13 +9,18 @@ import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
+export interface JwtPayloadReturnType {
+  access_token: string;
+  user: IUser;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
-  async login(loginUserDto: CreateAuthDto): Promise<{ access_token: string }> {
+  async login(loginUserDto: CreateAuthDto): Promise<JwtPayloadReturnType> {
     const { password, email } = loginUserDto;
 
     const userFind = await this.usersService.findOne(email);
@@ -38,7 +44,7 @@ export class AuthService {
 
     return {
       access_token,
-      ...userFind,
+      user: userFind,
     };
   }
 }

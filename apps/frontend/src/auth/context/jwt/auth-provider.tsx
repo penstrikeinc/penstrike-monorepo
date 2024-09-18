@@ -4,9 +4,10 @@ import { useEffect, useReducer, useCallback, useMemo } from 'react';
 // utils
 import axios, { endpoints } from 'src/utils/axios';
 //
+import { useCreateUserMutation, useLoginMutation } from 'src/services';
 import { AuthContext } from './auth-context';
 import { isValidToken, setSession } from './utils';
-import { ActionMapType, AuthStateType, AuthUserType } from '../../types';
+import { ActionMapType, AuthStateType, AuthUserType, RegisterParamsType } from '../../types';
 
 // ----------------------------------------------------------------------
 
@@ -83,11 +84,12 @@ type Props = {
 
 export function AuthProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { mutateAsync: loginReq } = useLoginMutation();
+  const { mutateAsync: createUser } = useCreateUserMutation();
 
   const initialize = useCallback(async () => {
     try {
       const accessToken = sessionStorage.getItem(STORAGE_KEY);
-
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
@@ -125,50 +127,51 @@ export function AuthProvider({ children }: Props) {
   }, [initialize]);
 
   // LOGIN
-  const login = useCallback(async (email: string, password: string) => {
-    const data = {
-      email,
-      password,
-    };
-
-    const response = await axios.post(endpoints.auth.login, data);
-
-    const { accessToken, user } = response.data;
-
-    setSession(accessToken);
-
-    dispatch({
-      type: Types.LOGIN,
-      payload: {
-        user,
-      },
-    });
-  }, []);
-
-  // REGISTER
-  const register = useCallback(
-    async (email: string, password: string, firstName: string, lastName: string) => {
-      const data = {
+  const login = useCallback(
+    async (email: string, password: string) => {
+      const payload = {
         email,
         password,
-        firstName,
-        lastName,
       };
 
-      const response = await axios.post(endpoints.auth.register, data);
-
-      const { accessToken, user } = response.data;
-
-      sessionStorage.setItem(STORAGE_KEY, accessToken);
-
-      dispatch({
-        type: Types.REGISTER,
-        payload: {
-          user,
+      loginReq(payload, {
+        onSuccess: (response) => {
+          console.log({ response });
+          // todo fix type issue
+          const { accessToken, user } = response.data;
+          setSession(accessToken);
+          dispatch({
+            type: Types.LOGIN,
+            payload: {
+              user,
+            },
+          });
         },
       });
     },
-    []
+    [loginReq]
+  );
+
+  // REGISTER
+  const register = useCallback(
+    async (params: RegisterParamsType) => {
+      const { payload, onSuccess } = params;
+
+      createUser(payload, {
+        onSuccess: (response) => {
+          const { accessToken, user } = response.data;
+          setSession(accessToken);
+          dispatch({
+            type: Types.REGISTER,
+            payload: {
+              user,
+            },
+          });
+          onSuccess();
+        },
+      });
+    },
+    [createUser]
   );
 
   // LOGOUT
