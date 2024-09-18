@@ -1,5 +1,8 @@
 {
-  "name": "abc",
+  "dependencies": {
+    "@nestjs/mapped-types": "*"
+  },
+  "name": "penstrike-monorepo",
   "private": true,
   "scripts": {
     "build": "turbo build",
