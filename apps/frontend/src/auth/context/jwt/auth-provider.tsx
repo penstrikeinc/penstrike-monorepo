@@ -4,7 +4,9 @@ import { useEffect, useReducer, useCallback, useMemo } from 'react';
 // utils
 import axios, { endpoints } from 'src/utils/axios';
 //
-import { useCreateUserMutation, useLoginMutation } from 'src/services';
+import { useCreateUserMutation, useLoginMutation, useLogoutMutation } from 'src/services';
+import { IUser, JwtReturnType } from 'src/types';
+import { NEXT_PUBLIC_API_URL } from 'src/config-global';
 import { AuthContext } from './auth-context';
 import { isValidToken, setSession } from './utils';
 import { ActionMapType, AuthStateType, AuthUserType, RegisterParamsType } from '../../types';
@@ -86,17 +88,20 @@ export function AuthProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { mutateAsync: loginReq } = useLoginMutation();
   const { mutateAsync: createUser } = useCreateUserMutation();
+  const { mutateAsync: LogoutUser } = useLogoutMutation();
 
   const initialize = useCallback(async () => {
     try {
       const accessToken = sessionStorage.getItem(STORAGE_KEY);
+
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const response = await axios.get(endpoints.auth.me);
+        const response = await axios.get<IUser>(endpoints.auth.profile);
 
-        const { user } = response.data;
-
+        // TODO check response
+        const user = response.data;
+        console.log({ response, user });
         dispatch({
           type: Types.INITIAL,
           payload: {
@@ -127,36 +132,57 @@ export function AuthProvider({ children }: Props) {
   }, [initialize]);
 
   // LOGIN
-  const login = useCallback(
-    async (email: string, password: string) => {
-      const payload = {
-        email,
-        password,
-      };
+  const login = useCallback(async (email: string, password: string) => {
+    const payload = {
+      email,
+      password,
+    };
 
-      loginReq(payload, {
-        onSuccess: (response) => {
-          console.log({ response });
-          // todo fix type issue
-          const { accessToken, user } = response.data;
-          setSession(accessToken);
-          dispatch({
-            type: Types.LOGIN,
-            payload: {
-              user,
-            },
-          });
+    const response = await fetch(`${NEXT_PUBLIC_API_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data: JwtReturnType = await response.json();
+
+    if (data) {
+      setSession(data.access_token);
+      dispatch({
+        type: Types.LOGIN,
+        payload: {
+          user: data.user,
         },
       });
-    },
-    [loginReq]
-  );
+    }
+
+    // loginReq(payload, {
+    //   onSuccess: (response) => {
+    //     console.log({ response });
+    //     // todo fix type issue
+    //     // const { access_token, user } = response.data;
+    //     // console.log({ response, access_token, user });
+    //     // setSession(accessToken);
+    //     // dispatch({
+    //     //   type: Types.LOGIN,
+    //     //   payload: {
+    //     //     user,
+    //     //   },
+    //     // });
+    //   },
+    // }).then((data) => {
+    //   console.log(data);
+    // });
+  }, []);
 
   // REGISTER
   const register = useCallback(
     async (params: RegisterParamsType) => {
       const { payload, onSuccess } = params;
 
+      // todo fix type issue.......
       createUser(payload, {
         onSuccess: (response) => {
           const { accessToken, user } = response.data;
@@ -176,11 +202,12 @@ export function AuthProvider({ children }: Props) {
 
   // LOGOUT
   const logout = useCallback(async () => {
+    LogoutUser();
     setSession(null);
     dispatch({
       type: Types.LOGOUT,
     });
-  }, []);
+  }, [LogoutUser]);
 
   // ----------------------------------------------------------------------
 

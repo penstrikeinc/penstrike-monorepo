@@ -2,5 +2,5 @@ import { IUser } from './user';
 
 export interface JwtReturnType {
   user: IUser;
-  accessToken: string;
+  access_token: string;
 }

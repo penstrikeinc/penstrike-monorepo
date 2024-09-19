@@ -34,5 +34,7 @@ export const MAPBOX_API = process.env.NEXT_PUBLIC_MAPBOX_API;
 // ROOT PATH AFTER LOGIN SUCCESSFUL
 export const PATH_AFTER_LOGIN = paths.dashboard.root; // as '/dashboard'
 
+export const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export const PENSTRIKE_USER_KEY = 'penstrike-user';
 

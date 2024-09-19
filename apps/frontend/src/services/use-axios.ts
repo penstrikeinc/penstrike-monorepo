@@ -17,7 +17,7 @@ export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '';
 
 export const useAxios = () => {
   const [user] = useLocalStorage<JwtReturnType | null>(PENSTRIKE_USER_KEY, null);
-  const accessToken = user?.accessToken;
+  const accessToken = user?.access_token;
 
   const axiosInstance = useMemo(() => {
     const instance = axios.create({

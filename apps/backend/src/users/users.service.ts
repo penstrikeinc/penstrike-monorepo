@@ -1,30 +1,36 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Users } from './entities/user.entity';
+import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { IUser } from 'src/auth/auth.service';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(Users)
-    private readonly usersService: Repository<Users>,
+    @InjectRepository(User)
+    private readonly usersService: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<Users> {
-    const { password, ...user } = createUserDto;
+  async create(createUserDto: CreateUserDto): Promise<IUser> {
     const saltOrRounds = 10;
-    const hashPassword = await bcrypt.hash(password, saltOrRounds);
+    const hashPassword = await bcrypt.hash(
+      createUserDto.password,
+      saltOrRounds,
+    );
 
     const userCreate = this.usersService.create({
-      ...user,
+      ...createUserDto,
       password: hashPassword,
     });
-    return await this.usersService.save(userCreate);
+    const result = await this.usersService.save(userCreate);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...rest } = result;
+    return rest;
   }
 
-  async findOne(email: string): Promise<Users> {
+  async findOne(email: string): Promise<User> {
     const user = await this.usersService.findOne({
       where: { email },
     });

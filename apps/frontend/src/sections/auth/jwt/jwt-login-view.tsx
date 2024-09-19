@@ -49,7 +49,7 @@ export default function JwtLoginView() {
   });
 
   const defaultValues = {
-    email: 'a@a.com',
+    email: 'admin@gmail.com',
     password: '12345',
   };
 
@@ -67,7 +67,6 @@ export default function JwtLoginView() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       await login(data.email, data.password);
-
       router.push(returnTo || PATH_AFTER_LOGIN);
     } catch (error) {
       console.error(error);
@@ -132,7 +131,7 @@ export default function JwtLoginView() {
       {renderHead}
 
       <Alert severity="info" sx={{ mb: 3 }}>
-        Use email : <strong>demo@minimals.cc</strong> / password :<strong> demo1234</strong>
+        Use email : <strong>admin@gmail.com</strong> / password :<strong>12345</strong>
       </Alert>
 
       {renderForm}

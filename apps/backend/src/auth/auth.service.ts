@@ -1,4 +1,3 @@
-import { IUser } from './../../../frontend/src/types/user';
 import {
   BadRequestException,
   Injectable,
@@ -8,6 +7,16 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+
+export interface IUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export interface JwtPayloadReturnType {
   access_token: string;
@@ -20,6 +29,7 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
+
   async login(loginUserDto: CreateAuthDto): Promise<JwtPayloadReturnType> {
     const { password, email } = loginUserDto;
 
@@ -46,5 +56,26 @@ export class AuthService {
       access_token,
       user: userFind,
     };
+  }
+
+  async findProfile(cookie: string) {
+    try {
+      const jwtVerify = await this.jwtService.verifyAsync(cookie, {
+        secret: process.env.JWT_SECRET,
+      });
+      if (!jwtVerify) {
+        throw new UnauthorizedException('unauthorized access');
+      }
+      const user = await this.usersService.findOne(jwtVerify.email);
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...rest } = user;
+
+      return rest;
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (e) {
+      throw new UnauthorizedException('unauthorized access');
+    }
   }
 }

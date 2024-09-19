@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { Users } from './users/entities/user.entity';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -23,7 +23,7 @@ import { Users } from './users/entities/user.entity';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         // entities: [process.cwd(), 'dist/**/*.entity{.ts,.js}'],
-        entities: [Users],
+        entities: [User],
         synchronize: configService.get('DB_SYNCHRONIZE'),
       }),
     }),
