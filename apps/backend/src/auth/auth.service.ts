@@ -50,6 +50,7 @@ export class AuthService {
     const payload = { email: userFind.email, id: userFind.id };
     const access_token = await this.jwtService.signAsync(payload, {
       secret: process.env.JWT_SECRET,
+      expiresIn: '1d',
     });
 
     return {
@@ -77,5 +78,22 @@ export class AuthService {
     } catch (e) {
       throw new UnauthorizedException('unauthorized access');
     }
+  }
+
+  //todo refactor and remove later.....
+  async validateUser(username: string, pass: string): Promise<any> {
+    const user = await this.usersService.validateUser(username, pass);
+    if (user) {
+      return user;
+    }
+    return null;
+  }
+
+  async login2(user: any) {
+    console.log({ user });
+    const payload = { username: user.username, sub: user.userId };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 }

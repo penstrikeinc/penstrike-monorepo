@@ -5,37 +5,37 @@ import {
   Body,
   HttpCode,
   HttpStatus,
-  Req,
   Res,
+  Inject,
 } from '@nestjs/common';
 import { AuthService, IUser, JwtPayloadReturnType } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly authService: AuthService,
+  ) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(
     @Body() loginUserDto: CreateAuthDto,
-    @Res({ passthrough: true }) res: Response,
   ): Promise<JwtPayloadReturnType> {
     const response = await this.authService.login(loginUserDto);
-
-    res.cookie('access_token', response.access_token, {
-      httpOnly: true,
-    });
-
+    await this.cacheManager.set('access_token', response.access_token);
     return response;
   }
 
   // @UseGuards(AuthGuard)
   @Get('profile')
-  getProfile(@Req() req: Request): Promise<IUser> {
-    const cookie = req.cookies['access_token'];
-    return this.authService.findProfile(cookie);
+  async getProfile(): Promise<IUser> {
+    const token: string = await this.cacheManager.get('access_token');
+    return this.authService.findProfile(token);
   }
 
   @Post('logout')
