@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { UsersModule } from 'src/users/users.module';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { AuthService } from './auth.service';
+import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from './local.strategy';
-import { JwtStrategy } from './jwt.strategy';
+import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { UsersModule } from 'src/users/users.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
@@ -31,7 +31,6 @@ import * as redisStore from 'cache-manager-redis-store';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtService, LocalStrategy, JwtStrategy],
-  exports: [JwtStrategy, PassportModule],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
 })
 export class AuthModule {}

@@ -3,10 +3,10 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UsersService } from 'src/users/users.service';
+import { AuthPayloadDto } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { UsersService } from 'src/users/users.service';
 
 export interface IUser {
   id: string;
@@ -26,13 +26,12 @@ export interface JwtPayloadReturnType {
 @Injectable()
 export class AuthService {
   constructor(
+    private jwtService: JwtService,
     private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
   ) {}
 
-  async login(loginUserDto: CreateAuthDto): Promise<JwtPayloadReturnType> {
+  async login(loginUserDto: AuthPayloadDto): Promise<JwtPayloadReturnType> {
     const { password, email } = loginUserDto;
-
     const userFind = await this.usersService.findOne(email);
     const isMatch = await bcrypt.compare(password, userFind.password);
 
@@ -78,22 +77,5 @@ export class AuthService {
     } catch (e) {
       throw new UnauthorizedException('unauthorized access');
     }
-  }
-
-  //todo refactor and remove later.....
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.validateUser(username, pass);
-    if (user) {
-      return user;
-    }
-    return null;
-  }
-
-  async login2(user: any) {
-    console.log({ user });
-    const payload = { username: user.username, sub: user.userId };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
   }
 }
