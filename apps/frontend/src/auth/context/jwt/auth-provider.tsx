@@ -1,11 +1,8 @@
 'use client';
 
 import { useEffect, useReducer, useCallback, useMemo } from 'react';
-// utils
-import axios, { endpoints } from 'src/utils/axios';
-//
 import { useCreateUserMutation, useLoginMutation, useLogoutMutation } from 'src/services';
-import { IUser, JwtReturnType } from 'src/types';
+import { JwtReturnType } from 'src/types';
 import { NEXT_PUBLIC_API_URL } from 'src/config-global';
 import { AuthContext } from './auth-context';
 import { isValidToken, setSession } from './utils';
@@ -97,11 +94,11 @@ export function AuthProvider({ children }: Props) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const response = await axios.get<IUser>(endpoints.auth.profile);
+        // const response = await axios.get<IUser>(endpoints.auth.profile);
+        // todo : refactor axis service and remove later
+        const response = await fetch(`${NEXT_PUBLIC_API_URL}/auth/profile`);
+        const user = await response.json();
 
-        // TODO check response
-        const user = response.data;
-        console.log({ response, user });
         dispatch({
           type: Types.INITIAL,
           payload: {
@@ -138,6 +135,7 @@ export function AuthProvider({ children }: Props) {
       password,
     };
 
+    // Todo fix refactor axis service
     const response = await fetch(`${NEXT_PUBLIC_API_URL}/auth/login`, {
       method: 'POST',
       headers: {

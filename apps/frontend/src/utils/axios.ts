@@ -1,10 +1,10 @@
 import axios, { AxiosRequestConfig } from 'axios';
 // config
-import { HOST_API } from 'src/config-global';
+import { NEXT_PUBLIC_API_URL } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 
-const axiosInstance = axios.create({ baseURL: HOST_API });
+const axiosInstance = axios.create({ baseURL: NEXT_PUBLIC_API_URL });
 
 axiosInstance.interceptors.response.use(
   (res) => res,
