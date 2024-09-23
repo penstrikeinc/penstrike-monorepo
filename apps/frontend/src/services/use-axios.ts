@@ -1,8 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { useMemo } from 'react';
-import { PENSTRIKE_USER_KEY } from 'src/config-global';
-import { JwtReturnType } from 'src/types';
-import { useLocalStorage } from 'usehooks-ts';
+import { findSessionToken } from 'src/utils';
 
 export interface InterceptSuccessRequest {
   (request: AxiosRequestConfig): AxiosRequestConfig;
@@ -12,13 +10,11 @@ export interface InterceptSuccessResponse {
   (response: AxiosResponse): AxiosResponse;
 }
 
-export const interceptSuccessResponse: InterceptSuccessResponse = (response) => response.data;
+export const interceptSuccessResponse: InterceptSuccessResponse = (response) => response;
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '';
 
 export const useAxios = () => {
-  const [user] = useLocalStorage<JwtReturnType | null>(PENSTRIKE_USER_KEY, null);
-  const accessToken = user?.access_token;
-
+  const accessToken = findSessionToken();
   const axiosInstance = useMemo(() => {
     const instance = axios.create({
       baseURL: API_BASE_URL,
