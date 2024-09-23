@@ -17,5 +17,10 @@ export const useLogoutMutation = () => {
         variant: 'success',
       });
     },
+    onError: () => {
+      enqueueSnackbar('Email Logout failed!', {
+        variant: 'error',
+      });
+    },
   });
 };

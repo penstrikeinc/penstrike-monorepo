@@ -85,8 +85,5 @@ export const findSessionDecode = (): SessionPayload | undefined => {
 
 export const findSessionToken = (): string | null => {
   const accessToken = sessionStorage.getItem(CacheGroupEnum.SESSION);
-  if (!accessToken) {
-    return null;
-  }
   return accessToken;
 };
