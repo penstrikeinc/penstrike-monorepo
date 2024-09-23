@@ -13,7 +13,8 @@ import { useRouter } from 'src/routes/hooks';
 // components
 import { varHover } from 'src/components/animate';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { findSession, useAuthContext } from 'src/auth';
+import { useAuthContext } from 'src/auth';
+import { findSessionDecode } from 'src/utils';
 
 // ----------------------------------------------------------------------
 
@@ -37,8 +38,7 @@ const OPTIONS = [
 export default function AccountPopover() {
   const router = useRouter();
 
-  // const { user } = useMockedUser();
-  const user = findSession();
+  const user = findSessionDecode();
 
   const { logout } = useAuthContext();
 
