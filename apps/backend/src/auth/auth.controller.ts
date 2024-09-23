@@ -8,7 +8,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalGuard } from './guards/local.guard';
 import { Request } from 'express';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -41,22 +40,9 @@ export class AuthController {
     return this.authService.findProfile(token);
   }
 
-  // @Post('logout')
-  // logout(@Res({ passthrough: true }) res: Response) {
-  //   console.log('logout calling from backend');
-
-  //   res.clearCookie('access_token');
-
-  //   return { success: true };
-  // }
-
-  // @Post('login')
-  // @UseGuards(LocalGuard)
-  // async login(
-  //   @Body() loginUserDto: CreateAuthDto,
-  // ): Promise<JwtPayloadReturnType> {
-  //   const response = await this.authService.login(loginUserDto);
-  //   await this.cacheManager.set('access_token', response.access_token);
-  //   return response;
-  // }
+  @Post('logout')
+  async logout() {
+    await this.cacheManager.del(CacheGroupEnum.SESSION);
+    return { success: true };
+  }
 }
