@@ -1,9 +1,7 @@
 'use client';
 
-import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
 import Link from '@mui/material/Link';
@@ -30,7 +28,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 // ----------------------------------------------------------------------
 
-export default function JwtLoginView() {
+export function LoginView() {
   const { login } = useAuthContext();
 
   const router = useRouter();

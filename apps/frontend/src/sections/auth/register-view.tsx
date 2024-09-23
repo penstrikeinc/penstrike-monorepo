@@ -22,7 +22,7 @@ import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
-export default function JwtRegisterView() {
+export function RegisterView() {
   const { register } = useAuthContext();
 
   const router = useRouter();

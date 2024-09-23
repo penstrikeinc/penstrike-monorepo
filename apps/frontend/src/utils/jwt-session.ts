@@ -1,8 +1,5 @@
-// routes
 import { paths } from 'src/routes/paths';
 import { CacheGroupEnum, SessionPayload } from 'src/types';
-// utils
-import axios from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -60,21 +57,21 @@ export const tokenExpired = (exp: number) => {
 
 export const setSession = (accessToken: string | null) => {
   if (accessToken) {
-    sessionStorage.setItem(CacheGroupEnum.SESSION, accessToken);
-    axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem(CacheGroupEnum.SESSION, accessToken);
+    }
     // This function below will handle when token is expired
     const { exp } = jwtDecode(accessToken); // ~1day by minimals server
     tokenExpired(exp);
   } else {
     sessionStorage.removeItem(CacheGroupEnum.SESSION);
-
-    delete axios.defaults.headers.common.Authorization;
+    // delete axios.defaults.headers.common.Authorization;
   }
 };
 
 export const findSessionDecode = (): SessionPayload | undefined => {
-  const accessToken = sessionStorage.getItem(CacheGroupEnum.SESSION);
+  const accessToken =
+    typeof window !== 'undefined' ? sessionStorage.getItem(CacheGroupEnum.SESSION) : null;
 
   if (!accessToken) {
     return undefined;
@@ -84,6 +81,7 @@ export const findSessionDecode = (): SessionPayload | undefined => {
 };
 
 export const findSessionToken = (): string | null => {
-  const accessToken = sessionStorage.getItem(CacheGroupEnum.SESSION);
+  const accessToken =
+    typeof window !== 'undefined' ? sessionStorage.getItem(CacheGroupEnum.SESSION) : null;
   return accessToken;
 };

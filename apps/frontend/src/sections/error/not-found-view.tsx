@@ -15,7 +15,7 @@ import { PageNotFoundIllustration } from 'src/assets/illustrations';
 
 // ----------------------------------------------------------------------
 
-export default function NotFoundView() {
+export function NotFoundView() {
   return (
     <CompactLayout>
       <MotionContainer>

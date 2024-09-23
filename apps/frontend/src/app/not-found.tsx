@@ -1,4 +1,3 @@
-// sections
 import { NotFoundView } from 'src/sections/error';
 
 // ----------------------------------------------------------------------
