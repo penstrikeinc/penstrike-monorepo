@@ -7,21 +7,7 @@ import { AuthPayloadDto } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from 'src/users/users.service';
-
-export interface IUser {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  active: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface JwtPayloadReturnType {
-  access_token: string;
-  user: IUser;
-}
+import { JwtPayloadReturnType } from 'src/types';
 
 @Injectable()
 export class AuthService {
@@ -46,7 +32,11 @@ export class AuthService {
       );
     }
 
-    const payload = { email: userFind.email, id: userFind.id };
+    const payload = {
+      email: userFind.email,
+      userName: `${userFind.firstName} ${userFind.lastName}`,
+      id: userFind.id,
+    };
     const access_token = await this.jwtService.signAsync(payload, {
       secret: process.env.JWT_SECRET,
       expiresIn: '1d',

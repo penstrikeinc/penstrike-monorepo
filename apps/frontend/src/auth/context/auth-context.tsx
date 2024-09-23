@@ -1,8 +1,7 @@
 'use client';
 
 import { createContext } from 'react';
-//
-import { JWTContextType } from '../../types';
+import { JWTContextType } from '../types';
 
 // ----------------------------------------------------------------------
 

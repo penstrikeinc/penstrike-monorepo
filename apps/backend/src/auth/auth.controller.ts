@@ -14,6 +14,7 @@ import { JwtAuthGuard } from './guards/jwt.guard';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { AuthPayloadDto } from './dto/auth.dto';
+import { CacheGroupEnum } from 'src/types';
 
 @Controller('auth')
 export class AuthController {
@@ -23,11 +24,11 @@ export class AuthController {
   ) {}
 
   @Post('login')
-  @UseGuards(LocalGuard)
+  // @UseGuards(LocalGuard)
   async login(@Req() req: Request, @Body() loginUserDto: AuthPayloadDto) {
     // const user = req.user;
     const response = await this.authService.login(loginUserDto);
-    await this.cacheManager.set('access_token', response.access_token);
+    await this.cacheManager.set(CacheGroupEnum.SESSION, response.access_token);
     return response;
   }
 
@@ -36,7 +37,7 @@ export class AuthController {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getProfile(@Req() req: Request) {
     // const user = req.user;
-    const token: string = await this.cacheManager.get('access_token');
+    const token: string = await this.cacheManager.get(CacheGroupEnum.SESSION);
     return this.authService.findProfile(token);
   }
 

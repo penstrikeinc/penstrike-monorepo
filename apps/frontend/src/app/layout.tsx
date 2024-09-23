@@ -15,7 +15,7 @@ import { primaryFont } from 'src/theme/typography';
 import ProgressBar from 'src/components/progress-bar';
 import { MotionLazy } from 'src/components/animate/motion-lazy';
 import { SettingsProvider, SettingsDrawer } from 'src/components/settings';
-import { AuthConsumer, AuthProvider } from 'src/auth/context/jwt';
+import { AuthConsumer, AuthProvider } from 'src/auth';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // ----------------------------------------------------------------------

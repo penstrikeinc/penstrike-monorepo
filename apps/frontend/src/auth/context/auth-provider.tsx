@@ -2,11 +2,11 @@
 
 import { useEffect, useReducer, useCallback, useMemo } from 'react';
 import { useCreateUserMutation, useLoginMutation, useLogoutMutation } from 'src/services';
-import { JwtReturnType } from 'src/types';
+import { CacheGroupEnum, JwtReturnType } from 'src/types';
 import { NEXT_PUBLIC_API_URL } from 'src/config-global';
 import { AuthContext } from './auth-context';
 import { isValidToken, setSession } from './utils';
-import { ActionMapType, AuthStateType, AuthUserType, RegisterParamsType } from '../../types';
+import { ActionMapType, AuthStateType, AuthUserType, RegisterParamsType } from '../types';
 
 // ----------------------------------------------------------------------
 
@@ -75,8 +75,6 @@ const reducer = (state: AuthStateType, action: ActionsType) => {
 
 // ----------------------------------------------------------------------
 
-const STORAGE_KEY = 'accessToken';
-
 type Props = {
   children: React.ReactNode;
 };
@@ -86,6 +84,7 @@ export function AuthProvider({ children }: Props) {
   const { mutateAsync: loginReq } = useLoginMutation();
   const { mutateAsync: createUser } = useCreateUserMutation();
   const { mutateAsync: LogoutUser } = useLogoutMutation();
+  const STORAGE_KEY = CacheGroupEnum.SESSION;
 
   const initialize = useCallback(async () => {
     try {
@@ -96,7 +95,13 @@ export function AuthProvider({ children }: Props) {
 
         // const response = await axios.get<IUser>(endpoints.auth.profile);
         // todo : refactor axis service and remove later
-        const response = await fetch(`${NEXT_PUBLIC_API_URL}/auth/profile`);
+        const response = await fetch(`${NEXT_PUBLIC_API_URL}/auth/profile`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
         const user = await response.json();
 
         dispatch({
@@ -140,6 +145,7 @@ export function AuthProvider({ children }: Props) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        // Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(payload),
     });
