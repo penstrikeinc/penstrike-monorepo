@@ -8,3 +8,4 @@ export * from './hook-form';
 export * from './custom-breadcrumbs';
 export * from './chart';
 export * from './cve-scan-table';
+export * from './close-btn';

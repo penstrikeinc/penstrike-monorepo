@@ -1,10 +1,11 @@
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import { SxProps } from '@mui/material';
-import { PiX } from 'react-icons/pi';
+import { useTheme } from '@mui/material/styles';
 import { FC } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useGetDevice } from '../hooks';
+import { CloseBtn } from '../close-btn/component';
 
 export interface DialogHeaderProps {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ export interface DialogHeaderProps {
 export const DialogHeader: FC<DialogHeaderProps> = (props) => {
   const { children, onClose, ...other } = props;
   const { isPortable } = useGetDevice();
+  const theme = useTheme();
 
   return (
     <Stack sx={{ m: 0, p: 2 }} {...other}>
@@ -27,19 +29,15 @@ export const DialogHeader: FC<DialogHeaderProps> = (props) => {
         {children}
       </Stack>
       {onClose && !isPortable ? (
-        <IconButton
-          edge="start"
-          aria-label="close"
-          onClick={onClose}
+        <CloseBtn
+          onClose={onClose}
           sx={{
             position: 'absolute',
             right: 10,
             top: 8,
-            color: (theme) => theme.palette.grey[500],
+            color: theme.palette.grey[500],
           }}
-        >
-          <PiX size={25} />
-        </IconButton>
+        />
       ) : null}
     </Stack>
   );
