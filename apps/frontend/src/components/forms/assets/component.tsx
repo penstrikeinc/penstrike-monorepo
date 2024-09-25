@@ -1,40 +1,101 @@
-import { Typography } from '@mui/material';
+import { alpha, Button, TextField, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
-import { FC } from 'react';
-import { RHFTextField } from 'src/components/hook-form';
+import { FC, useCallback } from 'react';
+import { useFieldArray, UseFormReturn } from 'react-hook-form';
+import { assetDefaultValues, TAssets } from 'src/schemas';
+import { CloseBtn } from 'src/components/close-btn';
+import { FaPlusCircle } from 'react-icons/fa';
 
 export interface IAssetsFormProps {
   disabled?: boolean;
+  methods: UseFormReturn<TAssets>;
 }
 
 export const AssetsForm: FC<IAssetsFormProps> = (props) => {
-  const { disabled } = props;
+  const { disabled, methods } = props;
+  const { control, register } = methods;
   const theme = useTheme();
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'assets',
+  });
+  const onCloseRow = useCallback(
+    (index: number) => {
+      if (fields.length !== 1) {
+        remove(index);
+      }
+    },
+    [fields.length, remove]
+  );
 
   return (
     <>
-      <Grid item xs={12} sm={12}>
+      <Grid>
         <Typography variant="body1" color={theme.palette.primary.light}>
           Set Asset & URLs
         </Typography>
       </Grid>
-      <Grid item xs={12} sm={6}>
-        <RHFTextField
-          disabled={disabled}
-          name="assetsName"
-          label="Enter Assets Name"
-          placeholder="Web App name"
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <RHFTextField
-          disabled={disabled}
-          name="targetUrl"
-          label="Target Url"
-          placeholder="htttps://www.pentstrik.io/service"
-        />
-      </Grid>
+      {fields.map((field, index) => (
+        <Grid
+          key={field.id}
+          sx={{
+            p: 3.3,
+            my: 2,
+            borderRadius: 2,
+            display: 'flex',
+            position: 'relative',
+            bgcolor: alpha(theme.palette.grey[900], 0.4),
+          }}
+        >
+          <Grid width="100%" mr={2}>
+            <TextField
+              disabled={disabled}
+              {...register(`assets.${index}.assetsName`)}
+              label="Enter Assets Name"
+              placeholder="Web App name"
+              fullWidth
+            />
+          </Grid>
+          <Grid width="100%">
+            <TextField
+              disabled={disabled}
+              {...register(`assets.${index}.targetUrl`)}
+              label="Target Url"
+              placeholder="htttps://www.pentstrik.io/service"
+              fullWidth
+            />
+          </Grid>
+          <Grid item>
+            <CloseBtn
+              onClose={() => onCloseRow(index)}
+              sx={{
+                position: 'absolute',
+                right: 1,
+                top: 1,
+                color: theme.palette.grey[500],
+              }}
+            />
+          </Grid>
+        </Grid>
+      ))}
+      <Button
+        sx={{
+          width: 1,
+          height: 80,
+          borderRadius: 2,
+          bgcolor: alpha(theme.palette.grey[500], 0.04),
+          border: `dashed 1px ${theme.palette.primary.main}`,
+        }}
+        onClick={() => append(assetDefaultValues)}
+      >
+        <FaPlusCircle size={20} style={{ marginRight: 4 }} color={theme.palette.primary.main} />
+
+        <Typography variant="h6" color={theme.palette.primary.main}>
+          Add a Asset
+        </Typography>
+      </Button>
     </>
   );
 };

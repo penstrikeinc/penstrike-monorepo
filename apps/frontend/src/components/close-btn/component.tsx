@@ -10,7 +10,7 @@ interface CloseBtnProps {
 export const CloseBtn: FC<CloseBtnProps> = ({ onClose, sx, size = 'medium' }) => {
   const iconSize = {
     small: 16,
-    medium: 20,
+    medium: 18,
     large: 24,
   };
 

@@ -11,15 +11,15 @@ import { FaPlus, FaSearch } from 'react-icons/fa';
 import { useCallback, useState } from 'react';
 import { useSettingsContext } from 'src/components/settings';
 import { AddEditAssetsDialog, AssetsTable } from 'src/components';
-import { assetsDefaultValues, TAsset } from 'src/schemas/assets';
+import { assetsDefaultValues, TAssets } from 'src/schemas/assets';
 
 // ----------------------------------------------------------------------
 
 export function Assets() {
   const settings = useSettingsContext();
-  const [assetsDialogContext, setAssetsDialogContext] = useState<TAsset | null>(null);
+  const [assetsDialogContext, setAssetsDialogContext] = useState<TAssets | null>(null);
 
-  const addAssetsDialogOpenHandler = useCallback(async (context: TAsset | null) => {
+  const addAssetsDialogOpenHandler = useCallback(async (context: TAssets | null) => {
     setAssetsDialogContext(context ?? assetsDefaultValues);
   }, []);
 

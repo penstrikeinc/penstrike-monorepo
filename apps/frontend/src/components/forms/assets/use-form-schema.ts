@@ -1,10 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { assetSchema, assetsDefaultValues, TAsset } from 'src/schemas/assets';
+import { assetsDefaultValues, assetsSchema, TAssets } from 'src/schemas/assets';
 
 export const useAssetsFormSchema = () => {
-  const methods = useForm<TAsset>({
-    resolver: zodResolver(assetSchema),
+  const methods = useForm<TAssets>({
+    resolver: zodResolver(assetsSchema),
     defaultValues: assetsDefaultValues,
     mode: 'all',
   });
