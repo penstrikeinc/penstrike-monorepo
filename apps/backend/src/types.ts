@@ -14,7 +14,24 @@ export interface IUser {
   updatedAt: string;
 }
 
+export interface IAssetBE {
+  assetsName: string;
+  targetUrl: string;
+  user: IUser;
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface JwtPayloadReturnType {
   access_token: string;
   user: IUser;
+}
+
+export interface IJwtPayload {
+  email: string;
+  userName: string;
+  id: string;
+  iat: number;
+  exp: number;
 }

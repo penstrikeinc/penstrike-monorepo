@@ -1,7 +1,10 @@
+import { Asset } from 'src/assets/entities/asset.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -25,6 +28,10 @@ export class User {
 
   @Column({ type: 'boolean', default: false })
   active: boolean;
+
+  @OneToMany(() => Asset, (asset) => asset.user)
+  @JoinColumn({ name: 'asset' })
+  asset: Asset;
 
   @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })
   createdAt: string;

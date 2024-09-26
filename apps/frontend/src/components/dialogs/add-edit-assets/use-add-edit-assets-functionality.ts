@@ -1,6 +1,7 @@
 import { Dispatch, MouseEventHandler, SetStateAction, useCallback, useEffect } from 'react';
 import { useAssetsFormSchema } from 'src/components/forms';
 import { assetsDefaultValues, TAssets } from 'src/schemas/assets';
+import { useCreateAssetsMutation } from 'src/services';
 import { ICompletedStateProps } from './step-components/type';
 
 export interface IParams {
@@ -26,6 +27,7 @@ export const useAddEditAssetsFunctionality = (params: IParams) => {
     setCompleted,
   } = params;
   const { methods } = useAssetsFormSchema();
+  const { mutateAsync: createAssets } = useCreateAssetsMutation();
 
   const {
     handleSubmit,
@@ -61,22 +63,27 @@ export const useAddEditAssetsFunctionality = (params: IParams) => {
     setCompleted(newCompleted);
   }, [completed, isDisabled, isValid, setCompleted]);
 
-  useEffect(() => {
-    if (isEditMode) {
-      handleComplete();
-    }
-    // else if (isErrorsForm) {
-    //   handleComplete();
-    // }
-  }, [handleComplete, isEditMode]);
-
-  const onUpdateCategorySubmit = useCallback(async (data: TAssets) => {
+  const onUpdateAssetsSubmit = useCallback(async (data: TAssets) => {
     console.log({ data });
   }, []);
 
-  const onCreateCategorySubmit = useCallback(async (data: TAssets) => {
-    console.log({ data });
-  }, []);
+  const onCreateAssetsSubmit = useCallback(
+    async (data: TAssets) => {
+      const { assets } = data;
+
+      createAssets(assets, {
+        onSuccess: (res) => {
+          onCloseHandler();
+        },
+        onError: (error) => {
+          if (onError) {
+            onError(error);
+          }
+        },
+      });
+    },
+    [createAssets, onCloseHandler, onError]
+  );
 
   const handleNext = useCallback(() => {
     setActiveStep(activeStep + 1);
@@ -118,7 +125,7 @@ export const useAddEditAssetsFunctionality = (params: IParams) => {
     reset(context || assetsDefaultValues);
   }, [context, reset, setValue]);
 
-  const onSubmit = isEditMode ? onUpdateCategorySubmit : onCreateCategorySubmit;
+  const onSubmit = isEditMode ? onUpdateAssetsSubmit : onCreateAssetsSubmit;
 
   return {
     onSubmit: handleSubmit(onSubmit),

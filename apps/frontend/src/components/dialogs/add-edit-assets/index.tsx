@@ -27,7 +27,7 @@ export const AddEditAssetsDialog: FC<IAddEditAssetsProps> = (props) => {
   const { isMobile } = useGetDevice();
   const [completed, setCompleted] = useState<ICompletedStateProps>({});
 
-  const isEditMode = !!context;
+  const isEditMode = false;
   const open = !!context;
 
   const {
