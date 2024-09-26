@@ -13,17 +13,6 @@ export class UsersService {
     private readonly usersService: Repository<User>,
   ) {}
 
-  //todo refactor and removed later
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.findOne(username);
-    if (user && (await bcrypt.compare(pass, user.password))) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...result } = user;
-      return result;
-    }
-    return null;
-  }
-
   async create(createUserDto: CreateUserDto): Promise<IUser> {
     const saltOrRounds = 10;
     const hashPassword = await bcrypt.hash(
