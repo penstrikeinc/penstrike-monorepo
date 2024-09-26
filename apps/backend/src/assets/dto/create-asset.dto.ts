@@ -3,7 +3,7 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateAssetDto {
   @IsString()
   @IsNotEmpty()
-  assetsName: string;
+  assetName: string;
 
   @IsString()
   @IsNotEmpty()

@@ -8,16 +8,18 @@ import Typography from '@mui/material/Typography';
 // components
 import { Button, InputAdornment, TextField } from '@mui/material';
 import { FaPlus, FaSearch } from 'react-icons/fa';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useSettingsContext } from 'src/components/settings';
 import { AddEditAssetsDialog, AssetsTable } from 'src/components';
 import { assetsDefaultValues, TAssets } from 'src/schemas/assets';
-
-// ----------------------------------------------------------------------
+import { useGetAllUsersQuery } from 'src/services';
 
 export function Assets() {
   const settings = useSettingsContext();
   const [assetsDialogContext, setAssetsDialogContext] = useState<TAssets | null>(null);
+  const { data: assetsResponse } = useGetAllUsersQuery();
+
+  const assets = useMemo(() => assetsResponse?.data, [assetsResponse?.data]);
 
   const addAssetsDialogOpenHandler = useCallback(async (context: TAssets | null) => {
     setAssetsDialogContext(context ?? assetsDefaultValues);
@@ -67,7 +69,7 @@ export function Assets() {
             size="medium"
           />
         </Box>
-        <AssetsTable />
+        {assets && <AssetsTable assets={assets} />}
       </Box>
       <AddEditAssetsDialog context={assetsDialogContext} onClose={addEditCategoryCloseHandler} />
     </Container>

@@ -15,7 +15,7 @@ export class Asset {
   id: string;
 
   @Column()
-  assetsName: string;
+  assetName: string;
 
   @Column()
   targetUrl: string;

@@ -28,7 +28,7 @@ export class AssetsService {
   }
 
   findAll() {
-    return `This action returns all assets`;
+    return this.assetService.find();
   }
 
   findOne(id: number) {

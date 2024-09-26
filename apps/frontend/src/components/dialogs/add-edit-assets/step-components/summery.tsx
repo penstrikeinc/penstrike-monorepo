@@ -20,7 +20,7 @@ export const Summery: FC<StepComponentProps> = (props) => {
     <Grid container>
       {assets.map((asset, index) => (
         <Grid item xs={12} sm={12} key={index} sx={boxStyle}>
-          <Typography width="100%">Asset Name: {asset.assetsName}</Typography>
+          <Typography width="100%">Asset Name: {asset.assetName}</Typography>
           <Typography width="100%">Target Url: {asset.targetUrl}</Typography>
         </Grid>
       ))}

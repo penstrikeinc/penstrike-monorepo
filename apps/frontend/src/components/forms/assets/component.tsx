@@ -52,7 +52,7 @@ export const AssetsForm: FC<IAssetsFormProps> = (props) => {
           <Grid width="100%" mr={2}>
             <TextField
               disabled={disabled}
-              {...register(`assets.${index}.assetsName`)}
+              {...register(`assets.${index}.assetName`)}
               label="Enter Assets Name"
               placeholder="Web App name"
               fullWidth

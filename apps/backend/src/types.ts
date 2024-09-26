@@ -15,7 +15,7 @@ export interface IUser {
 }
 
 export interface IAssetBE {
-  assetsName: string;
+  assetName: string;
   targetUrl: string;
   user: IUser;
   id: string;
