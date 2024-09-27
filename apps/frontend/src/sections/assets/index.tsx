@@ -11,7 +11,7 @@ import { Button, InputAdornment, TextField } from '@mui/material';
 import { FaPlus, FaSearch } from 'react-icons/fa';
 import { useCallback, useMemo, useState } from 'react';
 import { useSettingsContext } from 'src/components/settings';
-import { AddEditAssetsDialog, AssetsTable } from 'src/components';
+import { AddEditAssetsDialog, AssetsTable, NotFoundCard } from 'src/components';
 import { useDeleteAssetMutation, useGetAllUsersQuery } from 'src/services';
 import { IAsset } from 'src/types/asset';
 import Swal from 'sweetalert2';
@@ -98,38 +98,43 @@ export function Assets() {
           Create New Asset
         </Button>
       </Box>
-      <Box
-        sx={{
-          mt: 5,
-          p: 2,
-          borderRadius: 2,
-          bgcolor: alpha(theme.palette.grey[500], 0.04),
-          border: `dashed 1px ${theme.palette.divider}`,
-        }}
-      >
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h6">All Assets</Typography>
-          <TextField
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <FaSearch size={18} />
-                </InputAdornment>
-              ),
-            }}
-            variant="outlined"
-            color="primary"
-            size="medium"
-          />
-        </Box>
-        {assets && (
+      {assets?.length ? (
+        <Box
+          sx={{
+            mt: 5,
+            p: 2,
+            borderRadius: 2,
+            bgcolor: alpha(theme.palette.grey[500], 0.04),
+            border: `dashed 1px ${theme.palette.divider}`,
+          }}
+        >
+          <Box
+            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
+          >
+            <Typography variant="h6">All Assets</Typography>
+            <TextField
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <FaSearch size={18} />
+                  </InputAdornment>
+                ),
+              }}
+              variant="outlined"
+              color="primary"
+              size="medium"
+            />
+          </Box>
+
           <AssetsTable
             assets={assets}
             onEdit={onAssetsEditHandler}
             onDelete={onAssetsDeleteHandler}
           />
-        )}
-      </Box>
+        </Box>
+      ) : (
+        <NotFoundCard entity="Assets" />
+      )}
       <AddEditAssetsDialog
         open={openDialog}
         context={assetsDialogContext}
