@@ -5,8 +5,8 @@ import Typography from '@mui/material/Typography';
 import { FC, useState } from 'react';
 import { Box, Step, StepButton, Stepper } from '@mui/material';
 import { ellipsis } from 'src/utils';
-import { TAssets } from 'src/schemas/assets';
 import Scrollbar from 'src/components/scrollbar';
+import { IAsset } from 'src/types';
 import { useGetDevice } from '../../hooks';
 import { DialogHeader } from '../../dialog-header';
 import { useAddEditAssetsFunctionality } from './use-add-edit-assets-functionality';
@@ -16,19 +16,19 @@ import { Summery } from './step-components/summery';
 import { StickyFooter } from './step-components/sticky-footer';
 
 export interface IAddEditAssetsProps {
-  context: TAssets | null;
+  open: boolean;
+  context: IAsset | null;
   onClose: () => void;
   onError?: (error: unknown) => void;
 }
 
 export const AddEditAssetsDialog: FC<IAddEditAssetsProps> = (props) => {
-  const { context, onClose, onError } = props;
+  const { context, onClose, onError, open } = props;
   const [activeStep, setActiveStep] = useState(0);
   const { isMobile } = useGetDevice();
   const [completed, setCompleted] = useState<ICompletedStateProps>({});
 
-  const isEditMode = false;
-  const open = !!context;
+  const isEditMode = !!context;
 
   const {
     onSubmit,

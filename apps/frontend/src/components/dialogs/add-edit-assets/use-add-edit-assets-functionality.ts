@@ -1,13 +1,14 @@
 import { Dispatch, MouseEventHandler, SetStateAction, useCallback, useEffect } from 'react';
 import { useAssetsFormSchema } from 'src/components/forms';
 import { assetsDefaultValues, TAssets } from 'src/schemas/assets';
-import { useCreateAssetsMutation } from 'src/services';
+import { useCreateAssetsMutation, useUpdateAssetMutation } from 'src/services';
+import { IAsset } from 'src/types';
 import { ICompletedStateProps } from './step-components/type';
 
 export interface IParams {
   isEditMode: boolean;
   onClose: () => void;
-  context: TAssets | null;
+  context: IAsset | null;
   onError?: (error: unknown) => void;
   activeStep: number;
   completed: ICompletedStateProps;
@@ -28,16 +29,17 @@ export const useAddEditAssetsFunctionality = (params: IParams) => {
   } = params;
   const { methods } = useAssetsFormSchema();
   const { mutateAsync: createAssets } = useCreateAssetsMutation();
+  const { mutateAsync: updateAsset } = useUpdateAssetMutation();
 
   const {
     handleSubmit,
-    setValue,
     reset,
-    formState: { isValid },
+    formState: { isDirty, isValid },
   } = methods;
 
+  const assetId = `${context?.id}`;
   const isMutationLoading = false;
-  const isDisabled = Boolean(!isValid);
+  const isDisabled = Boolean(!isValid || !isDirty);
 
   const onCloseHandler = useCallback(() => {
     reset(assetsDefaultValues);
@@ -51,8 +53,6 @@ export const useAddEditAssetsFunctionality = (params: IParams) => {
 
     if (isValid) {
       newCompleted[0] = true;
-    }
-    if (isValid) {
       newCompleted[1] = true;
     }
     if (!isDisabled) {
@@ -63,9 +63,25 @@ export const useAddEditAssetsFunctionality = (params: IParams) => {
     setCompleted(newCompleted);
   }, [completed, isDisabled, isValid, setCompleted]);
 
-  const onUpdateAssetsSubmit = useCallback(async (data: TAssets) => {
-    console.log({ data });
-  }, []);
+  const onUpdateAssetsSubmit = useCallback(
+    async (data: TAssets) => {
+      const { assets } = data;
+      updateAsset(
+        { assetId, payload: assets[0] },
+        {
+          onSuccess: (res) => {
+            onCloseHandler();
+          },
+          onError: (error) => {
+            if (onError) {
+              onError(error);
+            }
+          },
+        }
+      );
+    },
+    [assetId, onCloseHandler, onError, updateAsset]
+  );
 
   const onCreateAssetsSubmit = useCallback(
     async (data: TAssets) => {
@@ -122,8 +138,9 @@ export const useAddEditAssetsFunctionality = (params: IParams) => {
   );
 
   useEffect(() => {
-    reset(context || assetsDefaultValues);
-  }, [context, reset, setValue]);
+    const value: TAssets = context ? { assets: [context] } : assetsDefaultValues;
+    reset(value);
+  }, [context, reset]);
 
   const onSubmit = isEditMode ? onUpdateAssetsSubmit : onCreateAssetsSubmit;
 

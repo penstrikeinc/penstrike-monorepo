@@ -1,2 +1,3 @@
 export * from './use-create-mutation';
-export * from './use-get-all-assets-query';
+export * from './use-get-all-query';
+export * from './use-update-mutation';

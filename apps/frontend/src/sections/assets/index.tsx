@@ -11,21 +11,28 @@ import { FaPlus, FaSearch } from 'react-icons/fa';
 import { useCallback, useMemo, useState } from 'react';
 import { useSettingsContext } from 'src/components/settings';
 import { AddEditAssetsDialog, AssetsTable } from 'src/components';
-import { assetsDefaultValues, TAssets } from 'src/schemas/assets';
 import { useGetAllUsersQuery } from 'src/services';
+import { IAsset } from 'src/types/asset';
 
 export function Assets() {
   const settings = useSettingsContext();
-  const [assetsDialogContext, setAssetsDialogContext] = useState<TAssets | null>(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [assetsDialogContext, setAssetsDialogContext] = useState<IAsset | null>(null);
   const { data: assetsResponse } = useGetAllUsersQuery();
 
   const assets = useMemo(() => assetsResponse?.data, [assetsResponse?.data]);
 
-  const addAssetsDialogOpenHandler = useCallback(async (context: TAssets | null) => {
-    setAssetsDialogContext(context ?? assetsDefaultValues);
+  const addAssetsDialogOpenHandler = useCallback(() => {
+    setOpenDialog(true);
   }, []);
 
-  const addEditCategoryCloseHandler = useCallback(() => {
+  const onAssetsEditHandler = useCallback(async (context: IAsset) => {
+    setOpenDialog(true);
+    setAssetsDialogContext(context);
+  }, []);
+
+  const onAssetsDialogCloseHandler = useCallback(() => {
+    setOpenDialog(false);
     setAssetsDialogContext(null);
   }, []);
 
@@ -40,7 +47,7 @@ export function Assets() {
           variant="contained"
           color="primary"
           size="large"
-          onClick={() => addAssetsDialogOpenHandler(null)}
+          onClick={() => addAssetsDialogOpenHandler()}
         >
           Create New Asset
         </Button>
@@ -69,9 +76,13 @@ export function Assets() {
             size="medium"
           />
         </Box>
-        {assets && <AssetsTable assets={assets} />}
+        {assets && <AssetsTable assets={assets} onEdit={onAssetsEditHandler} />}
       </Box>
-      <AddEditAssetsDialog context={assetsDialogContext} onClose={addEditCategoryCloseHandler} />
+      <AddEditAssetsDialog
+        open={openDialog}
+        context={assetsDialogContext}
+        onClose={onAssetsDialogCloseHandler}
+      />
     </Container>
   );
 }

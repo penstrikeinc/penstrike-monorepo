@@ -35,8 +35,8 @@ export class AssetsService {
     return `This action returns a #${id} asset`;
   }
 
-  update(id: number, updateAssetDto: UpdateAssetDto) {
-    return `This action updates a #${id} asset`;
+  async update(id: string, updateAssetDto: UpdateAssetDto) {
+    return await this.assetService.update(id, updateAssetDto);
   }
 
   remove(id: number) {
