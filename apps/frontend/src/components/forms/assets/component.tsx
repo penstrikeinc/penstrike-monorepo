@@ -10,10 +10,11 @@ import { FaPlusCircle } from 'react-icons/fa';
 export interface IAssetsFormProps {
   disabled?: boolean;
   methods: UseFormReturn<TAssets>;
+  isEditMode?: boolean;
 }
 
 export const AssetsForm: FC<IAssetsFormProps> = (props) => {
-  const { disabled, methods } = props;
+  const { disabled, methods, isEditMode } = props;
   const { control, register } = methods;
   const theme = useTheme();
 
@@ -67,7 +68,7 @@ export const AssetsForm: FC<IAssetsFormProps> = (props) => {
               fullWidth
             />
           </Grid>
-          <Grid item>
+          {fields.length > 1 && (
             <CloseBtn
               onClose={() => onCloseRow(index)}
               sx={{
@@ -77,7 +78,7 @@ export const AssetsForm: FC<IAssetsFormProps> = (props) => {
                 color: theme.palette.grey[500],
               }}
             />
-          </Grid>
+          )}
         </Grid>
       ))}
       <Button
@@ -87,8 +88,10 @@ export const AssetsForm: FC<IAssetsFormProps> = (props) => {
           borderRadius: 2,
           bgcolor: alpha(theme.palette.grey[500], 0.04),
           border: `dashed 1px ${theme.palette.primary.main}`,
+          opacity: isEditMode ? 0.3 : 1,
         }}
         onClick={() => append(assetDefaultValues)}
+        disabled={isEditMode}
       >
         <FaPlusCircle size={20} style={{ marginRight: 4 }} color={theme.palette.primary.main} />
 

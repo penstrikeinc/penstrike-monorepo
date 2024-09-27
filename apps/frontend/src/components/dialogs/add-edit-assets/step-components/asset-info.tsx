@@ -4,13 +4,13 @@ import { FormProvider } from 'src/components/hook-form';
 import { StepComponentProps } from './type';
 
 export const AssetInfo: FC<StepComponentProps> = memo((props: StepComponentProps) => {
-  const { methods } = props;
+  const { methods, isEditMode } = props;
   const { handleSubmit } = methods;
   const onSubmit = useCallback(() => {}, []);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <AssetsForm methods={methods} />
+      <AssetsForm methods={methods} isEditMode={isEditMode} />
     </FormProvider>
   );
 });
