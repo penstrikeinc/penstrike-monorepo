@@ -1,11 +1,20 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { AssetStatusEnum } from 'src/types';
 
 export class CreateAssetDto {
   @IsString()
   @IsNotEmpty()
-  assetName: string;
+  name: string;
 
   @IsString()
   @IsNotEmpty()
-  targetUrl: string;
+  url: string;
+
+  @IsString()
+  @IsOptional()
+  type: string;
+
+  @IsString()
+  @IsOptional()
+  status: AssetStatusEnum;
 }

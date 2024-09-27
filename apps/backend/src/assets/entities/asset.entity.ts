@@ -1,3 +1,4 @@
+import { AssetStatusEnum } from 'src/types';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -15,10 +16,21 @@ export class Asset {
   id: string;
 
   @Column()
-  assetName: string;
+  name: string;
 
   @Column()
-  targetUrl: string;
+  url: string;
+
+  @Column({ nullable: true })
+  type: string;
+
+  @Column({
+    default: AssetStatusEnum.ACTIVE,
+    enum: AssetStatusEnum,
+    type: 'enum',
+    nullable: true,
+  })
+  status: AssetStatusEnum;
 
   @ManyToOne(() => User, (user) => user.asset)
   @JoinColumn({ name: 'user' })

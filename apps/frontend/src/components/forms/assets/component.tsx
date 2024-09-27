@@ -52,7 +52,7 @@ export const AssetsForm: FC<IAssetsFormProps> = (props) => {
           <Grid width="100%" mr={2}>
             <TextField
               disabled={disabled}
-              {...register(`assets.${index}.assetName`)}
+              {...register(`assets.${index}.name`)}
               label="Enter Assets Name"
               placeholder="Web App name"
               fullWidth
@@ -61,7 +61,7 @@ export const AssetsForm: FC<IAssetsFormProps> = (props) => {
           <Grid width="100%">
             <TextField
               disabled={disabled}
-              {...register(`assets.${index}.targetUrl`)}
+              {...register(`assets.${index}.url`)}
               label="Target Url"
               placeholder="htttps://www.pentstrik.io/service"
               fullWidth

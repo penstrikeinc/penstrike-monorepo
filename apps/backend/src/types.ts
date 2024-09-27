@@ -4,6 +4,12 @@ export enum CacheGroupEnum {
   PENTESTS = 'PENTESTS',
 }
 
+export enum AssetStatusEnum {
+  ACTIVE = 'ACTIVE',
+  UNDER_REVIEW = 'UNDER_REVIEW',
+  INACTIVE = 'INACTIVE',
+}
+
 export interface IUser {
   id: string;
   firstName: string;
@@ -15,10 +21,12 @@ export interface IUser {
 }
 
 export interface IAssetBE {
-  assetName: string;
-  targetUrl: string;
-  user: IUser;
   id: string;
+  name: string;
+  url: string;
+  type: string;
+  status: AssetStatusEnum;
+  user: IUser;
   createdAt: string;
   updatedAt: string;
 }
