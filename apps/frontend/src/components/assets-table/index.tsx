@@ -9,14 +9,13 @@ import { IconButton, Stack } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { FaPen, FaTrashAlt } from 'react-icons/fa';
 import { IoEye } from 'react-icons/io5';
-import { TAssets } from 'src/schemas';
 import { IAsset } from 'src/types';
 import Scrollbar from '../scrollbar';
 
 interface IProps {
   assets: IAsset[];
   onEdit: (asset: IAsset) => void;
-  onDelete?: (asset: TAssets) => void;
+  onDelete: (id: string) => void;
 }
 
 export function AssetsTable(params: IProps) {
@@ -51,10 +50,10 @@ export function AssetsTable(params: IProps) {
                     <IconButton aria-label="edit" size="medium" onClick={() => onEdit(asset)}>
                       <FaPen size={20} color={theme.palette.primary.main} />
                     </IconButton>
-                    <IconButton aria-label="edit" size="medium" onClick={() => onEdit(asset)}>
+                    <IconButton aria-label="edit" size="medium" onClick={() => onDelete(asset.id)}>
                       <FaTrashAlt size={20} color={theme.palette.error.main} />
                     </IconButton>
-                    <IconButton aria-label="edit" size="medium" onClick={() => onEdit(asset)}>
+                    <IconButton aria-label="edit" size="medium">
                       <IoEye size={20} color={theme.palette.info.main} />
                     </IconButton>
                   </Stack>

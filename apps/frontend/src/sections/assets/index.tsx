@@ -1,24 +1,28 @@
 'use client';
 
 // @mui
-import { alpha } from '@mui/material/styles';
+import { alpha, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+
 // components
 import { Button, InputAdornment, TextField } from '@mui/material';
 import { FaPlus, FaSearch } from 'react-icons/fa';
 import { useCallback, useMemo, useState } from 'react';
 import { useSettingsContext } from 'src/components/settings';
 import { AddEditAssetsDialog, AssetsTable } from 'src/components';
-import { useGetAllUsersQuery } from 'src/services';
+import { useDeleteAssetMutation, useGetAllUsersQuery } from 'src/services';
 import { IAsset } from 'src/types/asset';
+import Swal from 'sweetalert2';
 
 export function Assets() {
   const settings = useSettingsContext();
   const [openDialog, setOpenDialog] = useState(false);
   const [assetsDialogContext, setAssetsDialogContext] = useState<IAsset | null>(null);
   const { data: assetsResponse } = useGetAllUsersQuery();
+  const { mutateAsync: deleteAsset } = useDeleteAssetMutation();
+  const theme = useTheme();
 
   const assets = useMemo(() => assetsResponse?.data, [assetsResponse?.data]);
 
@@ -30,6 +34,48 @@ export function Assets() {
     setOpenDialog(true);
     setAssetsDialogContext(context);
   }, []);
+
+  const onAssetsDeleteHandler = useCallback(
+    async (id: string) => {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true,
+        iconColor: theme.palette.primary.main,
+        color: theme.palette.text.primary,
+        cancelButtonColor: theme.palette.error.main,
+        confirmButtonColor: theme.palette.success.main,
+        background: theme.palette.background.paper,
+        showConfirmButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: 'Deleted!',
+            text: 'Your asset has been deleted.',
+            icon: 'success',
+            color: theme.palette.text.primary,
+            showCloseButton: true,
+            showConfirmButton: false,
+            background: theme.palette.background.paper,
+          }).then(() => {
+            deleteAsset({ assetId: id });
+          });
+        }
+      });
+    },
+    [
+      deleteAsset,
+      theme.palette.background.paper,
+      theme.palette.error.main,
+      theme.palette.primary.main,
+      theme.palette.success.main,
+      theme.palette.text.primary,
+    ]
+  );
 
   const onAssetsDialogCloseHandler = useCallback(() => {
     setOpenDialog(false);
@@ -57,8 +103,8 @@ export function Assets() {
           mt: 5,
           p: 2,
           borderRadius: 2,
-          bgcolor: (theme) => alpha(theme.palette.grey[500], 0.04),
-          border: (theme) => `dashed 1px ${theme.palette.divider}`,
+          bgcolor: alpha(theme.palette.grey[500], 0.04),
+          border: `dashed 1px ${theme.palette.divider}`,
         }}
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
@@ -76,7 +122,13 @@ export function Assets() {
             size="medium"
           />
         </Box>
-        {assets && <AssetsTable assets={assets} onEdit={onAssetsEditHandler} />}
+        {assets && (
+          <AssetsTable
+            assets={assets}
+            onEdit={onAssetsEditHandler}
+            onDelete={onAssetsDeleteHandler}
+          />
+        )}
       </Box>
       <AddEditAssetsDialog
         open={openDialog}

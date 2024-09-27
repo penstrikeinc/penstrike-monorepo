@@ -41,6 +41,6 @@ export class AssetsController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.assetsService.remove(+id);
+    return this.assetsService.remove(id);
   }
 }

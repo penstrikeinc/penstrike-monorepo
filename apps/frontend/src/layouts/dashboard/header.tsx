@@ -74,7 +74,7 @@ export default function Header({ onOpenNav }: Props) {
     <AppBar
       sx={{
         height: HEADER.H_MOBILE,
-        zIndex: theme.zIndex.appBar + 1,
+        zIndex: 1,
         ...bgBlur({
           color: theme.palette.background.default,
         }),

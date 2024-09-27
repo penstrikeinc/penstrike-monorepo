@@ -39,7 +39,7 @@ export class AssetsService {
     return await this.assetService.update(id, updateAssetDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} asset`;
+  async remove(id: string) {
+    return await this.assetService.delete(id);
   }
 }
