@@ -1,4 +1,5 @@
 import { Asset } from 'src/assets/entities/asset.entity';
+import { Pentest } from 'src/pentest/entities/pentest.entity';
 import {
   Column,
   CreateDateColumn,
@@ -30,8 +31,12 @@ export class User {
   active: boolean;
 
   @OneToMany(() => Asset, (asset) => asset.user)
-  @JoinColumn({ name: 'asset' })
+  @JoinColumn({ name: 'asset_id' })
   asset: Asset;
+
+  @OneToMany(() => Pentest, (pentest) => pentest.user)
+  @JoinColumn({ name: 'pentest_id' })
+  pentest: Pentest;
 
   @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })
   createdAt: string;
