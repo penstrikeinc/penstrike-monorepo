@@ -3,3 +3,4 @@ export * from './jwt-session';
 export * from './user';
 export * from './pageable-response';
 export * from './asset';
+export * from './pentest';
