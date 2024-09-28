@@ -9,3 +9,4 @@ export * from './custom-breadcrumbs';
 export * from './chart';
 export * from './cve-scan-table';
 export * from './close-btn';
+export * from './pentests-table';
