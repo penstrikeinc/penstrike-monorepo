@@ -10,6 +10,14 @@ export enum AssetStatusEnum {
   INACTIVE = 'INACTIVE',
 }
 
+export enum PentestStatusEnum {
+  SETUP = 'SETUP',
+  TESTING = 'TESTING',
+  COMPLETE = 'COMPLETE',
+  RETESTING = 'RETESTING',
+  SCOPING = 'SCOPING',
+}
+
 export interface IUser {
   id: string;
   firstName: string;

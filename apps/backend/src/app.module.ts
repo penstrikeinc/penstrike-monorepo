@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AssetsModule } from './assets/assets.module';
+import { PentestModule } from './pentest/pentest.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { AssetsModule } from './assets/assets.module';
     UsersModule,
     AuthModule,
     AssetsModule,
+    PentestModule,
   ],
   controllers: [],
   providers: [],

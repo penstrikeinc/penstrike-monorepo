@@ -28,7 +28,6 @@ export class Asset {
     default: AssetStatusEnum.ACTIVE,
     enum: AssetStatusEnum,
     type: 'enum',
-    nullable: true,
   })
   status: AssetStatusEnum;
 
