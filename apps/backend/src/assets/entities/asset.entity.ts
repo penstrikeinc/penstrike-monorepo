@@ -1,3 +1,4 @@
+import { Pentest } from 'src/pentest/entities/pentest.entity';
 import { AssetStatusEnum } from 'src/types';
 import { User } from 'src/users/entities/user.entity';
 import {
@@ -32,8 +33,11 @@ export class Asset {
   status: AssetStatusEnum;
 
   @ManyToOne(() => User, (user) => user.asset)
-  @JoinColumn({ name: 'user' })
   user: User;
+
+  @ManyToOne(() => Pentest, (pentest) => pentest.assets)
+  @JoinColumn({ name: 'pentest_id' })
+  pentest: Pentest;
 
   @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })
   createdAt: string;

@@ -4,7 +4,6 @@ import { UpdateAssetDto } from './dto/update-asset.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Asset } from './entities/asset.entity';
 import { Repository } from 'typeorm';
-import { IAssetBE } from 'src/types';
 
 @Injectable()
 export class AssetsService {
@@ -19,10 +18,11 @@ export class AssetsService {
   }: {
     createAssetDto: CreateAssetDto[];
     userId: string;
-  }): Promise<IAssetBE[]> {
+  }): Promise<Asset[]> {
     const savedAssets = createAssetDto.map((asset) => {
-      const create = this.assetService.create(asset);
-      return this.assetService.save({ ...create, user: { id: userId } });
+      const payload = { ...asset, user: { id: userId } };
+      const create = this.assetService.create(payload);
+      return this.assetService.save(create);
     });
     return await Promise.all(savedAssets);
   }
