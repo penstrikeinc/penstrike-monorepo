@@ -13,7 +13,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 // routes
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
-import { useSearchParams, useRouter } from 'src/routes/hooks';
+import { useRouter } from 'src/routes/hooks';
 // config
 import { PATH_AFTER_LOGIN } from 'src/config-global';
 // hooks
@@ -23,8 +23,8 @@ import { useAuthContext } from 'src/auth/hooks';
 // components
 import Iconify from 'src/components/iconify';
 import { FormProvider, RHFTextField } from 'src/components/hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { loginDefaultValues, LoginSchema, TLogin } from 'src/schemas';
 
 // ----------------------------------------------------------------------
 
@@ -35,25 +35,11 @@ export function LoginView() {
 
   const [errorMsg, setErrorMsg] = useState('');
 
-  const searchParams = useSearchParams();
-
-  const returnTo = searchParams.get('returnTo');
-
   const password = useBoolean();
 
-  const LoginSchema = z.object({
-    email: z.string().email('Email must be a valid email address'),
-    password: z.string().min(1, 'Password is required'),
-  });
-
-  const defaultValues = {
-    email: 'admin@gmail.com',
-    password: '12345',
-  };
-
-  const methods = useForm({
+  const methods = useForm<TLogin>({
     resolver: zodResolver(LoginSchema),
-    defaultValues,
+    defaultValues: loginDefaultValues,
   });
 
   const {
@@ -62,10 +48,12 @@ export function LoginView() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (data: TLogin) => {
     try {
-      await login(data.email, data.password);
-      router.push(returnTo || PATH_AFTER_LOGIN);
+      await login(data, () => {
+        reset();
+        router.push(PATH_AFTER_LOGIN);
+      });
     } catch (error) {
       console.error(error);
       reset();
