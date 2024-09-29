@@ -1,5 +1,5 @@
 import { LogoutOptions, RedirectLoginOptions, PopupLoginOptions } from '@auth0/auth0-react';
-import { TRegister } from 'src/schemas';
+import { TLogin, TRegister } from 'src/schemas';
 import { IUser } from 'src/types';
 
 // ----------------------------------------------------------------------
@@ -26,7 +26,7 @@ export type AuthStateType = {
 // ----------------------------------------------------------------------
 
 type CanRemove = {
-  login?: (email: string, password: string) => Promise<void>;
+  login?: (data: TLogin, callback: () => void) => Promise<void>;
   register?: (params: RegisterParamsType) => Promise<void>;
   //
   loginWithGoogle?: () => Promise<void>;
@@ -53,7 +53,7 @@ export type JWTContextType = CanRemove & {
   loading: boolean;
   authenticated: boolean;
   unauthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (data: TLogin, callback: () => void) => Promise<void>;
   register: (params: RegisterParamsType) => Promise<void>;
   logout: () => Promise<void>;
 };

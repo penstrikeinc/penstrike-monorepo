@@ -6,6 +6,7 @@ import { IUser } from 'src/types';
 import { findSessionToken, isValidToken, setSession } from 'src/utils';
 import { useAxios } from 'src/services/use-axios';
 import { endpoints } from 'src/utils/axios';
+import { TLogin } from 'src/schemas';
 import { AuthContext } from './auth-context';
 import { ActionMapType, AuthStateType, AuthUserType, RegisterParamsType } from '../types';
 
@@ -129,12 +130,7 @@ export function AuthProvider({ children }: Props) {
 
   // LOGIN
   const login = useCallback(
-    async (email: string, password: string) => {
-      const payload = {
-        email,
-        password,
-      };
-
+    async (payload: TLogin, callback: () => void) => {
       loginReq(payload, {
         onSuccess: (response) => {
           const { access_token, user } = response.data;
@@ -145,6 +141,7 @@ export function AuthProvider({ children }: Props) {
               user,
             },
           });
+          callback();
         },
       });
     },
