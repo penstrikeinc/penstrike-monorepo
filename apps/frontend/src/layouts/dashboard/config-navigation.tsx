@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { TbLayoutDashboardFilled } from 'react-icons/tb';
 import { FaNoteSticky, FaMoneyBillTrendUp } from 'react-icons/fa6';
 import { ImBug } from 'react-icons/im';
-import { BsShieldFillExclamation } from 'react-icons/bs';
+import { BsShieldFillExclamation, BsUpcScan } from 'react-icons/bs';
 import { PiNotepadFill } from 'react-icons/pi';
 import { HiUserGroup } from 'react-icons/hi2';
 import { paths } from 'src/routes/paths';
@@ -57,26 +57,31 @@ export function useNavData() {
           {
             title: 'Dashboard',
             path: paths.dashboard.root,
-            icon: <TbLayoutDashboardFilled size={22} />,
+            icon: <TbLayoutDashboardFilled size={20} />,
           },
-          { title: 'Assets', path: paths.dashboard.assets, icon: <FaNoteSticky size={22} /> },
+          { title: 'Assets', path: paths.dashboard.assets, icon: <FaNoteSticky size={20} /> },
           {
             title: 'Pentest',
             path: paths.dashboard.pentest,
-            icon: <ImBug size={22} />,
+            icon: <ImBug size={20} />,
           },
           {
             title: 'Findings',
             path: paths.dashboard.findings,
-            icon: <BsShieldFillExclamation size={22} />,
+            icon: <BsShieldFillExclamation size={20} />,
           },
-          { title: 'Reports', path: paths.dashboard.reports, icon: <PiNotepadFill size={22} /> },
+          {
+            title: 'CVE Scan',
+            path: paths.dashboard.cveScan,
+            icon: <BsUpcScan size={20} />,
+          },
+          { title: 'Reports', path: paths.dashboard.reports, icon: <PiNotepadFill size={20} /> },
           {
             title: 'Billings',
             path: paths.dashboard.billings,
-            icon: <FaMoneyBillTrendUp size={22} />,
+            icon: <FaMoneyBillTrendUp size={20} />,
           },
-          { title: 'Team', path: paths.dashboard.team, icon: <HiUserGroup size={22} /> },
+          { title: 'Team', path: paths.dashboard.team, icon: <HiUserGroup size={20} /> },
           {
             title: 'Setting',
             path: paths.dashboard.settings,

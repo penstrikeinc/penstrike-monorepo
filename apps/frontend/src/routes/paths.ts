@@ -15,6 +15,7 @@ export const paths = {
     assets: `${ROOTS.DASHBOARD}/assets`,
     pentest: `${ROOTS.DASHBOARD}/pentest`,
     findings: `${ROOTS.DASHBOARD}/findings`,
+    cveScan: `${ROOTS.DASHBOARD}/cve-scan`,
     reports: `${ROOTS.DASHBOARD}/reports`,
     billings: `${ROOTS.DASHBOARD}/billings`,
     team: `${ROOTS.DASHBOARD}/team`,

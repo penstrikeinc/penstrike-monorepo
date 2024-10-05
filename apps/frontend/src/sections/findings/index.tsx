@@ -1,178 +1,129 @@
 'use client';
 
 // @mui
-import { alpha } from '@mui/material/styles';
+import { alpha, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-// components
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  FormControl,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { FaSearch } from 'react-icons/fa';
-import { useState } from 'react';
-import { useSettingsContext } from 'src/components/settings';
-import { CustomBreadcrumbs, CveScanTable } from 'src/components';
-import { paths } from 'src/routes/paths';
-import ChartLine from './chart-line';
-import ChartRadialBar from './chart-radial-bar';
+import Typography from '@mui/material/Typography';
 
-// ----------------------------------------------------------------------
+// components
+import { Button, InputAdornment, TextField } from '@mui/material';
+import { FaPlus, FaSearch } from 'react-icons/fa';
+import { useCallback, useMemo, useState } from 'react';
+import { useSettingsContext } from 'src/components/settings';
+import { AddEditAssetsDialog, AssetsTable, NotFoundCard } from 'src/components';
+import { useDeleteAssetMutation, useGetAllUsersQuery } from 'src/services';
+import { IAsset } from 'src/types/asset';
+import Swal from 'sweetalert2';
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'next/navigation';
 
 export function Findings() {
   const settings = useSettingsContext();
-  const [age, setAge] = useState('');
+  const [openDialog, setOpenDialog] = useState(false);
+  const [assetsDialogContext, setAssetsDialogContext] = useState<IAsset | null>(null);
+  const { data: assetsResponse } = useGetAllUsersQuery();
+  const { mutateAsync: deleteAsset } = useDeleteAssetMutation();
+  const theme = useTheme();
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
-  };
+  const router = useRouter();
+
+  const assets = useMemo(() => assetsResponse?.data, [assetsResponse?.data]);
+
+  const addAssetsDialogOpenHandler = useCallback(() => {
+    setOpenDialog(true);
+  }, []);
+
+  const onAssetsEditHandler = useCallback(async (context: IAsset) => {
+    setOpenDialog(true);
+    setAssetsDialogContext(context);
+  }, []);
+
+  const onAssetsDeleteHandler = useCallback(
+    async (id: string) => {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true,
+        iconColor: theme.palette.primary.main,
+        color: theme.palette.text.primary,
+        cancelButtonColor: theme.palette.error.main,
+        confirmButtonColor: theme.palette.success.main,
+        background: theme.palette.background.paper,
+        showConfirmButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: 'Deleted!',
+            text: 'Your asset has been deleted.',
+            icon: 'success',
+            color: theme.palette.text.primary,
+            showCloseButton: true,
+            showConfirmButton: false,
+            background: theme.palette.background.paper,
+          }).then(() => {
+            deleteAsset({ assetId: id });
+          });
+        }
+      });
+    },
+    [
+      deleteAsset,
+      theme.palette.background.paper,
+      theme.palette.error.main,
+      theme.palette.primary.main,
+      theme.palette.success.main,
+      theme.palette.text.primary,
+    ]
+  );
+
+  const onAssetShowHandler = useCallback(
+    (id: string) => {
+      const url = `${paths.dashboard.assets}/${id}`;
+      router.push(url);
+    },
+    [router]
+  );
+
+  const onAssetsDialogCloseHandler = useCallback(() => {
+    setOpenDialog(false);
+    setAssetsDialogContext(null);
+  }, []);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      <CustomBreadcrumbs
-        heading="Findings"
-        links={[
-          { name: 'Pentest', href: paths.dashboard.findings },
-          { name: 'Findings', href: paths.dashboard.findings },
-        ]}
-      />
-
-      <Box
-        mt={3}
-        gap={2}
-        display="grid"
-        gridTemplateColumns={{ xs: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
-      >
-        <Card>
-          <CardHeader title="Overall Risks" sx={{ mb: 5 }} />
-          <ChartRadialBar series={[44, 55]} />
-        </Card>
-        <Card>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <CardHeader title="Vulnerabilities Overview" />
-            <Box pt={2}>
-              <FormControl variant="filled" sx={{ mr: 2, minWidth: 120 }}>
-                <InputLabel id="demo-simple-select-standard-label">Last Week</InputLabel>
-                <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard"
-                  value={age}
-                  onChange={handleChange}
-                  label="Age"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl variant="filled" sx={{ mr: 2, minWidth: 120 }}>
-                <InputLabel id="demo-simple-select-standard-label">Critical</InputLabel>
-                <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard"
-                  value={age}
-                  onChange={handleChange}
-                  label="Age"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-          </Box>
-          <CardContent>
-            <ChartLine
-              series={[
-                {
-                  name: 'Desktops',
-                  data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
-                },
-              ]}
-            />
-          </CardContent>
-        </Card>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography variant="h4" color="text.secondary">
+          Assets
+        </Typography>
+        <Button
+          startIcon={<FaPlus size={18} />}
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={() => addAssetsDialogOpenHandler()}
+        >
+          Create New Asset
+        </Button>
       </Box>
-
-      <Box
-        sx={{
-          mt: 5,
-          p: 2,
-          borderRadius: 2,
-          bgcolor: (theme) => alpha(theme.palette.grey[500], 0.04),
-          border: (theme) => `dashed 1px ${theme.palette.divider}`,
-        }}
-      >
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h6">CVE Scan</Typography>
-
-          <Box>
-            <FormControl variant="filled" sx={{ mr: 1, minWidth: 120 }}>
-              <InputLabel id="demo-simple-select-standard-label">Age</InputLabel>
-              <Select
-                labelId="demo-simple-select-standard-label"
-                id="demo-simple-select-standard"
-                value={age}
-                onChange={handleChange}
-                label="Age"
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl variant="filled" sx={{ mr: 1, minWidth: 120 }}>
-              <InputLabel id="demo-simple-select-standard-label">Age</InputLabel>
-              <Select
-                labelId="demo-simple-select-standard-label"
-                id="demo-simple-select-standard"
-                value={age}
-                onChange={handleChange}
-                label="Age"
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl variant="filled" sx={{ mr: 1, minWidth: 120 }}>
-              <InputLabel id="demo-simple-select-standard-label">Age</InputLabel>
-              <Select
-                labelId="demo-simple-select-standard-label"
-                id="demo-simple-select-standard"
-                value={age}
-                onChange={handleChange}
-                label="Age"
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-            </FormControl>
+      {assets?.length ? (
+        <Box
+          sx={{
+            mt: 5,
+            p: 2,
+            borderRadius: 2,
+            bgcolor: alpha(theme.palette.grey[500], 0.04),
+            border: `dashed 1px ${theme.palette.divider}`,
+          }}
+        >
+          <Box
+            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
+          >
+            <Typography variant="h6">All Assets</Typography>
             <TextField
               InputProps={{
                 startAdornment: (
@@ -186,9 +137,22 @@ export function Findings() {
               size="medium"
             />
           </Box>
+
+          <AssetsTable
+            assets={assets}
+            onEdit={onAssetsEditHandler}
+            onDelete={onAssetsDeleteHandler}
+            onShow={onAssetShowHandler}
+          />
         </Box>
-        <CveScanTable />
-      </Box>
+      ) : (
+        <NotFoundCard entity="Assets" />
+      )}
+      <AddEditAssetsDialog
+        open={openDialog}
+        context={assetsDialogContext}
+        onClose={onAssetsDialogCloseHandler}
+      />
     </Container>
   );
 }
