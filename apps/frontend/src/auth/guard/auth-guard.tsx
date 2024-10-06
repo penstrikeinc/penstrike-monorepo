@@ -5,6 +5,14 @@ import { useRouter } from 'src/routes/hooks';
 //
 import { useAuthContext } from '../hooks';
 
+// ----------------------------------------------------------------------
+
+const loginPaths: Record<string, string> = {
+  jwt: paths.auth.login,
+};
+
+// ----------------------------------------------------------------------
+
 type Props = {
   children: React.ReactNode;
 };
@@ -12,19 +20,25 @@ type Props = {
 export default function AuthGuard({ children }: Props) {
   const router = useRouter();
 
-  const { authenticated } = useAuthContext();
+  const { authenticated, method } = useAuthContext();
 
   const [checked, setChecked] = useState(false);
 
   const check = useCallback(() => {
     if (!authenticated) {
-      const loginPath = paths.auth.login;
+      const searchParams = new URLSearchParams({
+        returnTo: window.location.pathname,
+      }).toString();
 
-      router.replace(loginPath);
+      const loginPath = loginPaths[method];
+
+      const href = `${loginPath}?${searchParams}`;
+
+      router.replace(href);
     } else {
       setChecked(true);
     }
-  }, [authenticated, router]);
+  }, [authenticated, method, router]);
 
   useEffect(() => {
     check();
