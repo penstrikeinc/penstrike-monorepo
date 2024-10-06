@@ -1,4 +1,4 @@
-import { IPentest } from './pentest';
+import { IPentest } from 'src/types/pentest';
 import { IUser } from './user';
 
 export enum AssetStatusEnum {
