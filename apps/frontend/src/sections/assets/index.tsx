@@ -25,7 +25,6 @@ export function Assets() {
   const { data: assetsResponse } = useGetAllUsersQuery();
   const { mutateAsync: deleteAsset } = useDeleteAssetMutation();
   const theme = useTheme();
-
   const router = useRouter();
 
   const assets = useMemo(() => assetsResponse?.data, [assetsResponse?.data]);
@@ -146,7 +145,7 @@ export function Assets() {
           />
         </Box>
       ) : (
-        <NotFoundCard entity="Assets" />
+        <NotFoundCard entity="Asset" />
       )}
       <AddEditAssetsDialog
         open={openDialog}

@@ -5,3 +5,4 @@ export * from './pentest';
 export * from './auth';
 export * from './assets-details';
 export * from './findings';
+export * from './pentest-details';

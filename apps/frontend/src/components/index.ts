@@ -11,3 +11,4 @@ export * from './cve-scan-table';
 export * from './close-btn';
 export * from './pentests-table';
 export * from './assets-details-table';
+export * from './pentest-details';
