@@ -4,7 +4,6 @@ const ROOTS = {
 };
 
 export const paths = {
-  minimalUI: 'https://mui.com/store/items/minimal-dashboard/',
   // AUTH
   auth: {
     login: `${ROOTS.AUTH}/login`,
@@ -16,6 +15,7 @@ export const paths = {
     assets: `${ROOTS.DASHBOARD}/assets`,
     pentest: `${ROOTS.DASHBOARD}/pentest`,
     findings: `${ROOTS.DASHBOARD}/findings`,
+    cveScan: `${ROOTS.DASHBOARD}/cve-scan`,
     reports: `${ROOTS.DASHBOARD}/reports`,
     billings: `${ROOTS.DASHBOARD}/billings`,
     team: `${ROOTS.DASHBOARD}/team`,

@@ -15,6 +15,8 @@ import { AddEditAssetsDialog, AssetsTable, NotFoundCard } from 'src/components';
 import { useDeleteAssetMutation, useGetAllUsersQuery } from 'src/services';
 import { IAsset } from 'src/types/asset';
 import Swal from 'sweetalert2';
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'next/navigation';
 
 export function Assets() {
   const settings = useSettingsContext();
@@ -23,6 +25,8 @@ export function Assets() {
   const { data: assetsResponse } = useGetAllUsersQuery();
   const { mutateAsync: deleteAsset } = useDeleteAssetMutation();
   const theme = useTheme();
+
+  const router = useRouter();
 
   const assets = useMemo(() => assetsResponse?.data, [assetsResponse?.data]);
 
@@ -75,6 +79,14 @@ export function Assets() {
       theme.palette.success.main,
       theme.palette.text.primary,
     ]
+  );
+
+  const onAssetShowHandler = useCallback(
+    (id: string) => {
+      const url = `${paths.dashboard.assets}/${id}`;
+      router.push(url);
+    },
+    [router]
   );
 
   const onAssetsDialogCloseHandler = useCallback(() => {
@@ -130,6 +142,7 @@ export function Assets() {
             assets={assets}
             onEdit={onAssetsEditHandler}
             onDelete={onAssetsDeleteHandler}
+            onShow={onAssetShowHandler}
           />
         </Box>
       ) : (

@@ -9,7 +9,7 @@ import { HEADER, NAV } from '../config-layout';
 
 // ----------------------------------------------------------------------
 
-const SPACING = 8;
+const SPACING = 4;
 
 export default function Main({ children, sx, ...other }: BoxProps) {
   const settings = useSettingsContext();
@@ -53,6 +53,8 @@ export default function Main({ children, sx, ...other }: BoxProps) {
         ...(lgUp && {
           px: 2,
           py: `${HEADER.H_DESKTOP + SPACING}px`,
+          // reduce border padding
+          pb: `${HEADER.H_DESKTOP - SPACING}px`,
           width: `calc(100% - ${NAV.W_VERTICAL}px)`,
           ...(isNavMini && {
             width: `calc(100% - ${NAV.W_MINI}px)`,

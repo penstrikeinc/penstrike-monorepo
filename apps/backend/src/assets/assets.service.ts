@@ -31,8 +31,11 @@ export class AssetsService {
     return this.assetService.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} asset`;
+  findOne(id: string) {
+    return this.assetService.findOne({
+      where: { id },
+      relations: { pentest: true, user: true },
+    });
   }
 
   async update(id: string, updateAssetDto: UpdateAssetDto) {

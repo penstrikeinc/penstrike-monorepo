@@ -24,7 +24,10 @@ export function CustomBreadcrumbs(props: CustomBreadcrumbsProps) {
 
           {/* BREADCRUMBS */}
           {!!links.length && (
-            <Breadcrumbs separator={<MdOutlineNavigateNext />} {...other}>
+            <Breadcrumbs
+              separator={<MdOutlineNavigateNext style={{ margin: '0 -10px' }} size={20} />}
+              {...other}
+            >
               {links.map((link) => (
                 <BreadcrumbsLink
                   key={link.name || ''}

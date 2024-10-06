@@ -35,7 +35,7 @@ export class AssetsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.assetsService.findOne(+id);
+    return this.assetsService.findOne(id);
   }
 
   @Patch(':id')

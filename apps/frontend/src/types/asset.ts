@@ -1,3 +1,4 @@
+import { IPentest } from './pentest';
 import { IUser } from './user';
 
 export enum AssetStatusEnum {
@@ -13,6 +14,7 @@ export interface IAsset {
   type: string;
   status: AssetStatusEnum;
   user: IUser;
+  pentest: IPentest;
   createdAt: string;
   updatedAt: string;
 }

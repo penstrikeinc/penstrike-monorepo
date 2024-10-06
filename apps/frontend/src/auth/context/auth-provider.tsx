@@ -7,16 +7,9 @@ import { findSessionToken, isValidToken, setSession } from 'src/utils';
 import { useAxios } from 'src/services/use-axios';
 import { endpoints } from 'src/utils/axios';
 import { TLogin } from 'src/schemas';
+import Swal from 'sweetalert2';
 import { AuthContext } from './auth-context';
 import { ActionMapType, AuthStateType, AuthUserType, RegisterParamsType } from '../types';
-
-// ----------------------------------------------------------------------
-
-// NOTE:
-// We only build demo at basic level.
-// Customer will need to do some extra handling yourself if you want to extend the logic and other features...
-
-// ----------------------------------------------------------------------
 
 enum Types {
   INITIAL = 'INITIAL',
@@ -39,8 +32,6 @@ type Payload = {
 };
 
 type ActionsType = ActionMapType<Payload>[keyof ActionMapType<Payload>];
-
-// ----------------------------------------------------------------------
 
 const initialState: AuthStateType = {
   user: null,
@@ -153,7 +144,6 @@ export function AuthProvider({ children }: Props) {
     async (params: RegisterParamsType) => {
       const { payload, onSuccess } = params;
 
-      // todo fix type issue.......
       createUser(payload, {
         onSuccess: (response) => {
           const { accessToken, user } = response.data;
@@ -173,14 +163,25 @@ export function AuthProvider({ children }: Props) {
 
   // LOGOUT
   const logout = useCallback(async () => {
-    LogoutUser()
-      .then(() => {
-        setSession(null);
-        dispatch({
-          type: Types.LOGOUT,
-        });
-      })
-      .catch((error) => console.error(error));
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to be logged out!',
+      icon: 'warning',
+      showCancelButton: true,
+      reverseButtons: true,
+      confirmButtonText: 'Yes, Logout!',
+    });
+
+    if (result.isConfirmed) {
+      LogoutUser()
+        .then(() => {
+          setSession(null);
+          dispatch({
+            type: Types.LOGOUT,
+          });
+        })
+        .catch((error) => console.error(error));
+    }
   }, [LogoutUser]);
 
   // ----------------------------------------------------------------------

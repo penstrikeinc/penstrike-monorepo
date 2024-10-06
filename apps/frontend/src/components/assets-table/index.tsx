@@ -16,10 +16,11 @@ interface IProps {
   assets: IAsset[];
   onEdit: (asset: IAsset) => void;
   onDelete: (id: string) => void;
+  onShow: (id: string) => void;
 }
 
 export function AssetsTable(params: IProps) {
-  const { assets, onEdit, onDelete } = params;
+  const { assets, onEdit, onDelete, onShow } = params;
   const theme = useTheme();
 
   return (
@@ -53,7 +54,7 @@ export function AssetsTable(params: IProps) {
                     <IconButton aria-label="edit" size="medium" onClick={() => onDelete(asset.id)}>
                       <FaTrashAlt size={20} color={theme.palette.error.main} />
                     </IconButton>
-                    <IconButton aria-label="edit" size="medium">
+                    <IconButton aria-label="edit" size="medium" onClick={() => onShow(asset.id)}>
                       <IoEye size={20} color={theme.palette.info.main} />
                     </IconButton>
                   </Stack>
