@@ -77,6 +77,7 @@ export const StyledIcon = styled(ListItemIcon)<StyledIconProps>(({ size }) => ({
   height: size,
   alignItems: 'center',
   justifyContent: 'center',
+  marginRight: 8,
 }));
 
 type StyledDotIconProps = {
