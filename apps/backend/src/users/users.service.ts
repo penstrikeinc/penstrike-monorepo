@@ -40,4 +40,14 @@ export class UsersService {
     }
     return user;
   }
+
+  async findAll() {
+    const users = await this.usersService.find();
+    return {
+      items: users,
+      meta: {
+        count: users.length,
+      },
+    };
+  }
 }
