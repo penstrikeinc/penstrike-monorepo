@@ -1,5 +1,6 @@
 import { Asset } from 'src/assets/entities/asset.entity';
 import { Pentest } from 'src/pentest/entities/pentest.entity';
+import { UserTypeEnum } from 'src/types';
 import {
   Column,
   CreateDateColumn,
@@ -30,6 +31,14 @@ export class User {
   @Column({ type: 'boolean', default: false })
   active: boolean;
 
+  @Column({
+    type: 'enum',
+    enum: UserTypeEnum,
+    default: UserTypeEnum.CUSTOMER,
+    name: 'user_type',
+  })
+  userType: UserTypeEnum;
+
   @OneToMany(() => Asset, (asset) => asset.user)
   @JoinColumn({ name: 'asset_id' })
   asset: Asset;
@@ -37,6 +46,9 @@ export class User {
   @OneToMany(() => Pentest, (pentest) => pentest.user)
   @JoinColumn({ name: 'pentest_id' })
   pentest: Pentest;
+
+  @OneToMany(() => Pentest, (pentest) => pentest.assignedBy)
+  assignedPentests?: Pentest[];
 
   @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })
   createdAt: string;

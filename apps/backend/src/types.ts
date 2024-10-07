@@ -18,6 +18,12 @@ export enum PentestStatusEnum {
   SCOPING = 'SCOPING',
 }
 
+export enum UserTypeEnum {
+  CUSTOMER = 'CUSTOMER',
+  PENTESTER = 'PENTESTER',
+  ADMIN = 'ADMIN',
+}
+
 export interface IUser {
   id: string;
   firstName: string;

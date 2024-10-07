@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { IUser } from 'src/types';
+import { IUser, UserTypeEnum } from 'src/types';
 
 @Injectable()
 export class UsersService {
@@ -23,6 +23,7 @@ export class UsersService {
     const userCreate = this.usersService.create({
       ...createUserDto,
       password: hashPassword,
+      userType: UserTypeEnum.CUSTOMER,
     });
     const result = await this.usersService.save(userCreate);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
