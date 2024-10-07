@@ -30,6 +30,7 @@ export interface IUser {
   lastName: string;
   email: string;
   active: boolean;
+  userType: UserTypeEnum;
   createdAt: string;
   updatedAt: string;
 }
