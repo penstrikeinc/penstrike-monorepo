@@ -12,7 +12,7 @@ import { FaPlus, FaSearch } from 'react-icons/fa';
 import { useCallback, useMemo, useState } from 'react';
 import { useSettingsContext } from 'src/components/settings';
 import { AddEditAssetsDialog, AssetsTable, NotFoundCard } from 'src/components';
-import { useDeleteAssetMutation, useGetAllUsersQuery } from 'src/services';
+import { useDeleteAssetMutation, useGetAllAssetQuery } from 'src/services';
 import { IAsset } from 'src/types/asset';
 import Swal from 'sweetalert2';
 import { paths } from 'src/routes/paths';
@@ -22,12 +22,12 @@ export function Assets() {
   const settings = useSettingsContext();
   const [openDialog, setOpenDialog] = useState(false);
   const [assetsDialogContext, setAssetsDialogContext] = useState<IAsset | null>(null);
-  const { data: assetsResponse } = useGetAllUsersQuery();
+  const { data: assetsResponse } = useGetAllAssetQuery();
   const { mutateAsync: deleteAsset } = useDeleteAssetMutation();
   const theme = useTheme();
   const router = useRouter();
 
-  const assets = useMemo(() => assetsResponse?.data, [assetsResponse?.data]);
+  const assets = useMemo(() => assetsResponse?.data.items || [], [assetsResponse?.data]);
 
   const addAssetsDialogOpenHandler = useCallback(() => {
     setOpenDialog(true);
@@ -109,7 +109,7 @@ export function Assets() {
           Create New Asset
         </Button>
       </Box>
-      {assets?.length ? (
+      {assets.length ? (
         <Box
           sx={{
             mt: 5,

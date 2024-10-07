@@ -1,16 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
-import { NonPageableResponseFe } from 'src/types';
+import { PageableResponseFe } from 'src/types';
 import { IAsset } from 'src/types/asset';
 import { ENTITY } from './entity';
 import { useAxios } from '../use-axios';
 
-export const getUsersQueryKey = () => [ENTITY];
+export const getAssetQueryKey = () => [ENTITY];
 
-export const useGetAllUsersQuery = () => {
+export const useGetAllAssetQuery = () => {
   const { axios } = useAxios();
 
-  return useQuery<NonPageableResponseFe<IAsset>>({
-    queryKey: getUsersQueryKey(),
+  return useQuery<PageableResponseFe<IAsset>>({
+    queryKey: getAssetQueryKey(),
     queryFn: () => axios.get(ENTITY),
     refetchOnWindowFocus: false,
   });

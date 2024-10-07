@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { TAsset } from 'src/schemas';
 import { ENTITY } from './entity';
 import { useAxios } from '../use-axios';
-import { getUsersQueryKey } from './use-get-all-query';
+import { getAssetQueryKey } from './use-get-all-query';
 
 interface IUpdateAsset {
   assetId: string;
@@ -31,7 +31,7 @@ export const useUpdateAssetMutation = () => {
         variant: 'success',
       });
       queryClient.invalidateQueries({
-        queryKey: getUsersQueryKey(),
+        queryKey: getAssetQueryKey(),
       });
     },
     onError: () => {

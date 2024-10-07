@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { ENTITY } from './entity';
 import { useAxios } from '../use-axios';
-import { getUsersQueryKey } from './use-get-all-query';
+import { getAssetQueryKey } from './use-get-all-query';
 
 interface IUpdateAsset {
   assetId: string;
@@ -29,7 +29,7 @@ export const useDeleteAssetMutation = () => {
         variant: 'success',
       });
       queryClient.invalidateQueries({
-        queryKey: getUsersQueryKey(),
+        queryKey: getAssetQueryKey(),
       });
     },
     onError: () => {
