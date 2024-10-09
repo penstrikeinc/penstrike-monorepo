@@ -27,8 +27,14 @@ export class AssetsService {
     return await Promise.all(savedAssets);
   }
 
-  findAll() {
-    return this.assetService.find();
+  async findAll() {
+    const assets = await this.assetService.find();
+    return {
+      items: assets,
+      meta: {
+        count: assets.length,
+      },
+    };
   }
 
   findOne(id: string) {

@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { PageableResponseFe } from 'src/types';
-import { IAsset } from 'src/types/asset';
+import { IAsset, PageableResponseFe } from 'src/types';
 import { ENTITY } from './entity';
 import { useAxios } from '../use-axios';
 

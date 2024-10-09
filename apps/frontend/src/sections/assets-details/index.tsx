@@ -18,11 +18,11 @@ import {
   NotFoundCard,
 } from 'src/components';
 import { useDeleteAssetMutation, useGetAssetInfoQuery } from 'src/services';
-import { IAsset } from 'src/types/asset';
 import Swal from 'sweetalert2';
 import { CiLock } from 'react-icons/ci';
 import Link from 'next/link';
 import { paths } from 'src/routes/paths';
+import { IAsset } from 'src/types';
 
 interface IAssetsDetailsProps {
   id: string;

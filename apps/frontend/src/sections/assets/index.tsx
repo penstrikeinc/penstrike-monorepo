@@ -13,7 +13,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useSettingsContext } from 'src/components/settings';
 import { AddEditAssetsDialog, AssetsTable, NotFoundCard } from 'src/components';
 import { useDeleteAssetMutation, useGetAllAssetQuery } from 'src/services';
-import { IAsset } from 'src/types/asset';
+import { IAsset } from 'src/types';
 import Swal from 'sweetalert2';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'next/navigation';
