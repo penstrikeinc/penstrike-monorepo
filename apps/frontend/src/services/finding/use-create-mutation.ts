@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { TFinding } from 'src/schemas';
+import { TFindingBE } from 'src/schemas';
 import { useSnackbar } from 'notistack';
 import { ENTITY } from './entity';
 import { useAxios } from '../use-axios';
 
 interface IParams {
-  payload: TFinding;
+  payload: TFindingBE;
 }
 
 export const useCreateFindingMutation = () => {

@@ -1,6 +1,6 @@
 import { Dispatch, MouseEventHandler, SetStateAction, useCallback, useEffect } from 'react';
 import { useFindingFormSchema } from 'src/components/forms';
-import { useCreateAssetMutation, useUpdateAssetMutation } from 'src/services';
+import { useCreateFindingMutation } from 'src/services';
 import { IAsset } from 'src/types';
 import { findingDefaultValues, TFinding } from 'src/schemas';
 import { ICompletedStateProps } from './step-components/type';
@@ -28,8 +28,7 @@ export const useAddEditFindingFunctionality = (params: IParams) => {
     setCompleted,
   } = params;
   const { methods } = useFindingFormSchema();
-  const { mutateAsync: createAssets } = useCreateAssetMutation();
-  const { mutateAsync: updateAsset } = useUpdateAssetMutation();
+  const { mutateAsync: createFinding } = useCreateFindingMutation();
 
   const {
     handleSubmit,
@@ -37,7 +36,6 @@ export const useAddEditFindingFunctionality = (params: IParams) => {
     formState: { isDirty, isValid },
   } = methods;
 
-  const assetId = `${context?.id}`;
   const isMutationLoading = false;
   const isDisabled = Boolean(!isValid || !isDirty);
 
@@ -63,7 +61,7 @@ export const useAddEditFindingFunctionality = (params: IParams) => {
     setCompleted(newCompleted);
   }, [completed, isDisabled, isValid, setCompleted]);
 
-  const onUpdateAssetsSubmit = useCallback(async (data: TFinding) => {
+  const onUpdateSubmit = useCallback(async (data: TFinding) => {
     // const { assets } = data;
     // updateAsset(
     //   { assetId, payload: assets[0] },
@@ -80,19 +78,31 @@ export const useAddEditFindingFunctionality = (params: IParams) => {
     // );
   }, []);
 
-  const onCreateAssetsSubmit = useCallback(async (data: TFinding) => {
-    // const { assets } = data;
-    // createAssets(assets, {
-    //   onSuccess: (res) => {
-    //     onCloseHandler();
-    //   },
-    //   onError: (error) => {
-    //     if (onError) {
-    //       onError(error);
-    //     }
-    //   },
-    // });
-  }, []);
+  const onCreateSubmit = useCallback(
+    async (data: TFinding) => {
+      const payload = {
+        ...data,
+        category: data.pentest.value,
+        severity: data.pentest.value,
+        pentest: data.pentest.value,
+      };
+
+      createFinding(
+        { payload },
+        {
+          onSuccess: (res) => {
+            onCloseHandler();
+          },
+          onError: (error) => {
+            if (onError) {
+              onError(error);
+            }
+          },
+        }
+      );
+    },
+    [createFinding, onCloseHandler, onError]
+  );
 
   const handleNext = useCallback(() => {
     setActiveStep(activeStep + 1);
@@ -134,7 +144,7 @@ export const useAddEditFindingFunctionality = (params: IParams) => {
     // reset(context);
   }, [context, reset]);
 
-  const onSubmit = isEditMode ? onUpdateAssetsSubmit : onCreateAssetsSubmit;
+  const onSubmit = isEditMode ? onUpdateSubmit : onCreateSubmit;
 
   return {
     onSubmit: handleSubmit(onSubmit),

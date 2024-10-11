@@ -89,7 +89,7 @@ export function Findings() {
             />
           </Box>
 
-          <FindingsTable findings={findings} onShow={onFindingShowHandler} />
+          {/* <FindingsTable findings={findings} onShow={onFindingShowHandler} /> */}
         </Box>
       ) : (
         <NotFoundCard entity="Finding" />

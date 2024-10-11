@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { CategoryEnum } from 'src/types';
-import { RHFAutocomplete } from '../hook-form/RHFAutocomplete';
+import { RHFAutocomplete } from '../hook-form';
 
 export interface ICategoryDropdownProps {
   disabled?: boolean;

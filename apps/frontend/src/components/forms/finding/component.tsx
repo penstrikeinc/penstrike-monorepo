@@ -49,17 +49,7 @@ export const FindingForm: FC<IFindingFormProps> = (props) => {
           <SeverityDropdown />
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
-          <PentestDropdown onChange={() => {}} pentestId="" />
-        </Grid>
-
-        <Grid item xs={12} sm={12} md={12}>
-          <RHFTextField
-            disabled={disabled}
-            name="description"
-            label="Description"
-            placeholder="Description of the finding"
-            fullWidth
-          />
+          <PentestDropdown />
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
           <RHFTextField
@@ -73,10 +63,12 @@ export const FindingForm: FC<IFindingFormProps> = (props) => {
         <Grid item xs={12} sm={12} md={12}>
           <RHFTextField
             disabled={disabled}
-            name="reproduce"
-            label="Reproduce"
-            placeholder="Reproduce of the finding"
+            name="description"
+            label="Description"
+            placeholder="Description of the finding"
             fullWidth
+            multiline
+            rows={4}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
@@ -86,8 +78,22 @@ export const FindingForm: FC<IFindingFormProps> = (props) => {
             label="Impact"
             placeholder="Impact of the finding"
             fullWidth
+            multiline
+            rows={3}
           />
         </Grid>
+        <Grid item xs={12} sm={12} md={12}>
+          <RHFTextField
+            disabled={disabled}
+            name="reproduce"
+            label="Reproduce"
+            placeholder="Reproduce of the finding"
+            fullWidth
+            multiline
+            rows={4}
+          />
+        </Grid>
+
         <Grid item xs={12} sm={12} md={12}>
           <RHFTextField
             disabled={disabled}
@@ -95,6 +101,8 @@ export const FindingForm: FC<IFindingFormProps> = (props) => {
             label="Concept"
             placeholder="Concept of the finding"
             fullWidth
+            multiline
+            rows={3}
           />
         </Grid>
       </Grid>
