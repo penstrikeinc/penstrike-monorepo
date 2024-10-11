@@ -10,9 +10,9 @@ interface InputData {
 }
 
 export const mapDataToSelect = (inputArray: InputData[]): OptionType[] =>
-  inputArray.map((store) => ({
-    label: store.title,
-    value: store.id,
+  inputArray.map((item) => ({
+    label: item.title,
+    value: item.id,
   }));
 
 interface InputPeople {
@@ -22,8 +22,20 @@ interface InputPeople {
   [key: string]: any;
 }
 
+interface InputPentest {
+  id: string;
+  name: string;
+  [key: string]: any;
+}
+
 export const mapPeopleDataToSelect = (inputArray: InputPeople[]): OptionType[] =>
   inputArray.map((item) => ({
     label: `${item.firstName ?? ''} ${item.lastName}`,
+    value: item.id,
+  }));
+
+export const mapPentestDataToSelect = (inputArray: InputPentest[]): OptionType[] =>
+  inputArray.map((item, index) => ({
+    label: `(${index + 1}) ${item.name}`,
     value: item.id,
   }));

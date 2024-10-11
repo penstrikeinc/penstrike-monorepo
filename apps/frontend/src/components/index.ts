@@ -13,3 +13,6 @@ export * from './pentests-table';
 export * from './assets-details-table';
 export * from './pentest-details';
 export * from './findings-table';
+export * from './category-dropdown';
+export * from './severity-dropdown';
+export * from './pentest-dropdown';
