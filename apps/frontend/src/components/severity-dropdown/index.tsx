@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { SeverityEnum } from 'src/types';
-import { RHFAutocomplete } from '../hook-form/RHFAutocomplete';
+import { RHFAutocomplete } from '../hook-form';
 
 interface IDropdownProps {
   disabled?: boolean;
