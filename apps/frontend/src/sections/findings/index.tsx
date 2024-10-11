@@ -11,7 +11,7 @@ import { Button, InputAdornment, TextField } from '@mui/material';
 import { FaPlus, FaSearch } from 'react-icons/fa';
 import { useCallback, useMemo, useState } from 'react';
 import { useSettingsContext } from 'src/components/settings';
-import { AddEditAssetsDialog, AssetsTable, NotFoundCard } from 'src/components';
+import { AddEditFindingDialog, AssetsTable, NotFoundCard } from 'src/components';
 import { useDeleteAssetMutation, useGetAllAssetQuery } from 'src/services';
 import { IAsset } from 'src/types';
 import Swal from 'sweetalert2';
@@ -98,7 +98,7 @@ export function Findings() {
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="h4" color="text.secondary">
-          Assets
+          Findings
         </Typography>
         <Button
           startIcon={<FaPlus size={18} />}
@@ -107,7 +107,7 @@ export function Findings() {
           size="large"
           onClick={() => addAssetsDialogOpenHandler()}
         >
-          Create New Asset
+          Create New Findings
         </Button>
       </Box>
       {assets.length ? (
@@ -123,7 +123,7 @@ export function Findings() {
           <Box
             sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
           >
-            <Typography variant="h6">All Assets</Typography>
+            <Typography variant="h6">All Findings</Typography>
             <TextField
               InputProps={{
                 startAdornment: (
@@ -146,9 +146,9 @@ export function Findings() {
           />
         </Box>
       ) : (
-        <NotFoundCard entity="Assets" />
+        <NotFoundCard entity="Finding" />
       )}
-      <AddEditAssetsDialog
+      <AddEditFindingDialog
         open={openDialog}
         context={assetsDialogContext}
         onClose={onAssetsDialogCloseHandler}
