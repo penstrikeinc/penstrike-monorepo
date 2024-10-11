@@ -11,7 +11,7 @@ import { Button, InputAdornment, TextField } from '@mui/material';
 import { FaPlus, FaSearch } from 'react-icons/fa';
 import { useCallback, useMemo, useState } from 'react';
 import { useSettingsContext } from 'src/components/settings';
-import { AddEditFindingDialog, AssetsTable, NotFoundCard } from 'src/components';
+import { AddEditFindingDialog, FindingsTable, NotFoundCard } from 'src/components';
 import { useGetAllAssetQuery } from 'src/services';
 import { IAsset } from 'src/types';
 import { paths } from 'src/routes/paths';
@@ -30,11 +30,6 @@ export function Findings() {
 
   const addFindingDialogOpenHandler = useCallback(() => {
     setOpenDialog(true);
-  }, []);
-
-  const onFindingEditHandler = useCallback(async (context: IAsset) => {
-    setOpenDialog(true);
-    setFindingDialogContext(context);
   }, []);
 
   const onFindingShowHandler = useCallback(
@@ -94,12 +89,7 @@ export function Findings() {
             />
           </Box>
 
-          <AssetsTable
-            assets={findings}
-            onEdit={onFindingEditHandler}
-            onDelete={() => {}}
-            onShow={onFindingShowHandler}
-          />
+          <FindingsTable findings={findings} onShow={onFindingShowHandler} />
         </Box>
       ) : (
         <NotFoundCard entity="Finding" />

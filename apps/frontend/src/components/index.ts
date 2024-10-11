@@ -12,3 +12,4 @@ export * from './close-btn';
 export * from './pentests-table';
 export * from './assets-details-table';
 export * from './pentest-details';
+export * from './findings-table';
