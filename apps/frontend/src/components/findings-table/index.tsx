@@ -7,11 +7,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Chip } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { IAsset } from 'src/types';
+import { IFinding } from 'src/types';
 import Scrollbar from '../scrollbar';
 
 interface IProps {
-  findings: IAsset[];
+  findings: IFinding[];
   onShow: (id: string) => void;
 }
 
@@ -39,14 +39,22 @@ export function FindingsTable(params: IProps) {
             {findings.map((finding, index) => (
               <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell component="th" scope="row">
-                  {finding.name}
+                  {finding.id}
                 </TableCell>
-                <TableCell align="left">{finding.type}</TableCell>
-                <TableCell align="left">{finding.url}</TableCell>
-                <TableCell align="left">{finding.status}</TableCell>
+                <TableCell align="left">{finding.name}</TableCell>
+                <TableCell align="left">{finding.updatedAt}</TableCell>
+                <TableCell align="left">
+                  {' '}
+                  <Chip label={finding.severity} variant="outlined" />
+                  {finding.state}
+                </TableCell>
                 <TableCell align="center">
-                  <Chip label="severity" variant="outlined" />
+                  <Chip label={finding.state} variant="outlined" />
                 </TableCell>
+                <TableCell align="center">
+                  <Chip label={finding.category} variant="outlined" />
+                </TableCell>
+                <TableCell align="left">{finding.user.firstName}</TableCell>
               </TableRow>
             ))}
           </TableBody>
