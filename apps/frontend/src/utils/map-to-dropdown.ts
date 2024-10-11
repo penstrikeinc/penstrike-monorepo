@@ -35,7 +35,7 @@ export const mapPeopleDataToSelect = (inputArray: InputPeople[]): OptionType[] =
   }));
 
 export const mapPentestDataToSelect = (inputArray: InputPentest[]): OptionType[] =>
-  inputArray.map((item, index) => ({
-    label: `(${index + 1}) ${item.name}`,
+  inputArray.map((item) => ({
+    label: item.name,
     value: item.id,
   }));
