@@ -9,7 +9,7 @@ import Scrollbar from 'src/components/scrollbar';
 import { IAsset } from 'src/types';
 import { useGetDevice } from '../../hooks';
 import { DialogHeader } from '../../dialog-header';
-import { useAddEditFindingFunctionality } from './use-add-edit-assets-functionality';
+import { useAddEditFindingFunctionality } from './use-add-edit-functionality';
 import { ICompletedStateProps, IStep } from './step-components/type';
 import { Summery } from './step-components/summery';
 import { StickyFooter } from './step-components/sticky-footer';

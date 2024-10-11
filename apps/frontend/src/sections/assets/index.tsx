@@ -11,7 +11,7 @@ import { Button, InputAdornment, TextField } from '@mui/material';
 import { FaPlus, FaSearch } from 'react-icons/fa';
 import { useCallback, useMemo, useState } from 'react';
 import { useSettingsContext } from 'src/components/settings';
-import { AddEditAssetsDialog, AssetsTable, NotFoundCard } from 'src/components';
+import { AddEditAssetDialog, AssetsTable, NotFoundCard } from 'src/components';
 import { useDeleteAssetMutation, useGetAllAssetQuery } from 'src/services';
 import { IAsset } from 'src/types';
 import Swal from 'sweetalert2';
@@ -21,7 +21,7 @@ import { useRouter } from 'next/navigation';
 export function Assets() {
   const settings = useSettingsContext();
   const [openDialog, setOpenDialog] = useState(false);
-  const [assetsDialogContext, setAssetsDialogContext] = useState<IAsset | null>(null);
+  const [assetDialogContext, setAssetDialogContext] = useState<IAsset | null>(null);
   const { data: assetsResponse } = useGetAllAssetQuery();
   const { mutateAsync: deleteAsset } = useDeleteAssetMutation();
   const theme = useTheme();
@@ -29,16 +29,16 @@ export function Assets() {
 
   const assets = useMemo(() => assetsResponse?.data.items || [], [assetsResponse?.data]);
 
-  const addAssetsDialogOpenHandler = useCallback(() => {
+  const addAssetDialogOpenHandler = useCallback(() => {
     setOpenDialog(true);
   }, []);
 
-  const onAssetsEditHandler = useCallback(async (context: IAsset) => {
+  const onAssetEditHandler = useCallback(async (context: IAsset) => {
     setOpenDialog(true);
-    setAssetsDialogContext(context);
+    setAssetDialogContext(context);
   }, []);
 
-  const onAssetsDeleteHandler = useCallback(
+  const onAssetDeleteHandler = useCallback(
     async (id: string) => {
       Swal.fire({
         title: 'Are you sure?',
@@ -88,9 +88,9 @@ export function Assets() {
     [router]
   );
 
-  const onAssetsDialogCloseHandler = useCallback(() => {
+  const onAssetDialogCloseHandler = useCallback(() => {
     setOpenDialog(false);
-    setAssetsDialogContext(null);
+    setAssetDialogContext(null);
   }, []);
 
   return (
@@ -104,7 +104,7 @@ export function Assets() {
           variant="contained"
           color="primary"
           size="large"
-          onClick={() => addAssetsDialogOpenHandler()}
+          onClick={() => addAssetDialogOpenHandler()}
         >
           Create New Asset
         </Button>
@@ -139,18 +139,18 @@ export function Assets() {
 
           <AssetsTable
             assets={assets}
-            onEdit={onAssetsEditHandler}
-            onDelete={onAssetsDeleteHandler}
+            onEdit={onAssetEditHandler}
+            onDelete={onAssetDeleteHandler}
             onShow={onAssetShowHandler}
           />
         </Box>
       ) : (
         <NotFoundCard entity="Asset" />
       )}
-      <AddEditAssetsDialog
+      <AddEditAssetDialog
         open={openDialog}
-        context={assetsDialogContext}
-        onClose={onAssetsDialogCloseHandler}
+        context={assetDialogContext}
+        onClose={onAssetDialogCloseHandler}
       />
     </Container>
   );

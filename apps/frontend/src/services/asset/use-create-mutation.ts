@@ -5,7 +5,7 @@ import { useSnackbar } from 'notistack';
 import { ENTITY } from './entity';
 import { useAxios } from '../use-axios';
 
-export const useCreateAssetsMutation = () => {
+export const useCreateAssetMutation = () => {
   const queryClient = useQueryClient();
   const { axios } = useAxios();
   const { enqueueSnackbar } = useSnackbar();

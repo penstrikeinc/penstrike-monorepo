@@ -9,20 +9,20 @@ import Scrollbar from 'src/components/scrollbar';
 import { IAsset } from 'src/types';
 import { useGetDevice } from '../../hooks';
 import { DialogHeader } from '../../dialog-header';
-import { useAddEditAssetsFunctionality } from './use-add-edit-assets-functionality';
+import { useAddEditAssetFunctionality } from './use-add-edit-asset-functionality';
 import { ICompletedStateProps, IStep } from './step-components/type';
 import { AssetInfo } from './step-components/asset-info';
 import { Summery } from './step-components/summery';
 import { StickyFooter } from './step-components/sticky-footer';
 
-export interface IAddEditAssetsProps {
+export interface IAddEditAssetProps {
   open: boolean;
   context: IAsset | null;
   onClose: () => void;
   onError?: (error: unknown) => void;
 }
 
-export const AddEditAssetsDialog: FC<IAddEditAssetsProps> = (props) => {
+export const AddEditAssetDialog: FC<IAddEditAssetProps> = (props) => {
   const { context, onClose, onError, open } = props;
   const [activeStep, setActiveStep] = useState(0);
   const { isMobile } = useGetDevice();
@@ -40,7 +40,7 @@ export const AddEditAssetsDialog: FC<IAddEditAssetsProps> = (props) => {
     handleStep,
     isDisabled,
     isMutationLoading,
-  } = useAddEditAssetsFunctionality({
+  } = useAddEditAssetFunctionality({
     context,
     onClose,
     isEditMode,

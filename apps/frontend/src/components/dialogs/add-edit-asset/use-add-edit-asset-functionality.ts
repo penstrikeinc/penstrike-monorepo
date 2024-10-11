@@ -1,7 +1,7 @@
 import { Dispatch, MouseEventHandler, SetStateAction, useCallback, useEffect } from 'react';
-import { useAssetsFormSchema } from 'src/components/forms';
+import { useAssetFormSchema } from 'src/components/forms';
 import { assetsDefaultValues, TAssets } from 'src/schemas/assets';
-import { useCreateAssetsMutation, useUpdateAssetMutation } from 'src/services';
+import { useCreateAssetMutation, useUpdateAssetMutation } from 'src/services';
 import { IAsset } from 'src/types';
 import { ICompletedStateProps } from './step-components/type';
 
@@ -16,7 +16,7 @@ export interface IParams {
   setCompleted: Dispatch<SetStateAction<ICompletedStateProps>>;
 }
 
-export const useAddEditAssetsFunctionality = (params: IParams) => {
+export const useAddEditAssetFunctionality = (params: IParams) => {
   const {
     isEditMode,
     context,
@@ -27,8 +27,8 @@ export const useAddEditAssetsFunctionality = (params: IParams) => {
     setActiveStep,
     setCompleted,
   } = params;
-  const { methods } = useAssetsFormSchema();
-  const { mutateAsync: createAssets } = useCreateAssetsMutation();
+  const { methods } = useAssetFormSchema();
+  const { mutateAsync: createAsset } = useCreateAssetMutation();
   const { mutateAsync: updateAsset } = useUpdateAssetMutation();
 
   const {
@@ -63,7 +63,7 @@ export const useAddEditAssetsFunctionality = (params: IParams) => {
     setCompleted(newCompleted);
   }, [completed, isDisabled, isValid, setCompleted]);
 
-  const onUpdateAssetsSubmit = useCallback(
+  const onUpdateAssetSubmit = useCallback(
     async (data: TAssets) => {
       const { assets } = data;
       updateAsset(
@@ -83,11 +83,11 @@ export const useAddEditAssetsFunctionality = (params: IParams) => {
     [assetId, onCloseHandler, onError, updateAsset]
   );
 
-  const onCreateAssetsSubmit = useCallback(
+  const onCreateAssetSubmit = useCallback(
     async (data: TAssets) => {
       const { assets } = data;
 
-      createAssets(assets, {
+      createAsset(assets, {
         onSuccess: (res) => {
           onCloseHandler();
         },
@@ -98,7 +98,7 @@ export const useAddEditAssetsFunctionality = (params: IParams) => {
         },
       });
     },
-    [createAssets, onCloseHandler, onError]
+    [createAsset, onCloseHandler, onError]
   );
 
   const handleNext = useCallback(() => {
@@ -142,7 +142,7 @@ export const useAddEditAssetsFunctionality = (params: IParams) => {
     reset(value);
   }, [context, reset]);
 
-  const onSubmit = isEditMode ? onUpdateAssetsSubmit : onCreateAssetsSubmit;
+  const onSubmit = isEditMode ? onUpdateAssetSubmit : onCreateAssetSubmit;
 
   return {
     onSubmit: handleSubmit(onSubmit),

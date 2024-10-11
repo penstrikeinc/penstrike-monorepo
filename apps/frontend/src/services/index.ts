@@ -1,4 +1,4 @@
 export * from './user';
 export * from './auth';
-export * from './assets';
+export * from './asset';
 export * from './pentest';

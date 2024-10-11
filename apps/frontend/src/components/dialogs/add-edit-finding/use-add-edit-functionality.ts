@@ -1,6 +1,6 @@
 import { Dispatch, MouseEventHandler, SetStateAction, useCallback, useEffect } from 'react';
 import { useFindingFormSchema } from 'src/components/forms';
-import { useCreateAssetsMutation, useUpdateAssetMutation } from 'src/services';
+import { useCreateAssetMutation, useUpdateAssetMutation } from 'src/services';
 import { IAsset } from 'src/types';
 import { findingDefaultValues, TFinding } from 'src/schemas';
 import { ICompletedStateProps } from './step-components/type';
@@ -28,7 +28,7 @@ export const useAddEditFindingFunctionality = (params: IParams) => {
     setCompleted,
   } = params;
   const { methods } = useFindingFormSchema();
-  const { mutateAsync: createAssets } = useCreateAssetsMutation();
+  const { mutateAsync: createAssets } = useCreateAssetMutation();
   const { mutateAsync: updateAsset } = useUpdateAssetMutation();
 
   const {

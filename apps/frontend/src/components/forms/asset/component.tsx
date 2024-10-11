@@ -7,13 +7,13 @@ import { assetDefaultValues, TAssets } from 'src/schemas';
 import { CloseBtn } from 'src/components/close-btn';
 import { FaPlusCircle } from 'react-icons/fa';
 
-export interface IAssetsFormProps {
+export interface IAssetFormProps {
   disabled?: boolean;
   methods: UseFormReturn<TAssets>;
   isEditMode?: boolean;
 }
 
-export const AssetsForm: FC<IAssetsFormProps> = (props) => {
+export const AssetForm: FC<IAssetFormProps> = (props) => {
   const { disabled, methods, isEditMode } = props;
   const { control, register } = methods;
   const theme = useTheme();
@@ -54,7 +54,7 @@ export const AssetsForm: FC<IAssetsFormProps> = (props) => {
             <TextField
               disabled={disabled}
               {...register(`assets.${index}.name`)}
-              label="Enter Assets Name"
+              label="Enter Asset Name"
               placeholder="Web App name"
               fullWidth
             />

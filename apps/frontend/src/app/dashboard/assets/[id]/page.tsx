@@ -1,6 +1,6 @@
-import { AssetsDetails } from 'src/sections';
+import { AssetDetails } from 'src/sections';
 
 export default function Page({ params }: { params: { id: string } }) {
   const { id } = params;
-  return <AssetsDetails id={id} />;
+  return <AssetDetails id={id} />;
 }

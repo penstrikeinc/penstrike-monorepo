@@ -12,86 +12,42 @@ import { FaPlus, FaSearch } from 'react-icons/fa';
 import { useCallback, useMemo, useState } from 'react';
 import { useSettingsContext } from 'src/components/settings';
 import { AddEditFindingDialog, AssetsTable, NotFoundCard } from 'src/components';
-import { useDeleteAssetMutation, useGetAllAssetQuery } from 'src/services';
+import { useGetAllAssetQuery } from 'src/services';
 import { IAsset } from 'src/types';
-import Swal from 'sweetalert2';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'next/navigation';
 
 export function Findings() {
   const settings = useSettingsContext();
   const [openDialog, setOpenDialog] = useState(false);
-  const [assetsDialogContext, setAssetsDialogContext] = useState<IAsset | null>(null);
-  const { data: assetsResponse } = useGetAllAssetQuery();
-  const { mutateAsync: deleteAsset } = useDeleteAssetMutation();
+  const [findingDialogContext, setFindingDialogContext] = useState<IAsset | null>(null);
+  const { data: findingResponse } = useGetAllAssetQuery();
   const theme = useTheme();
 
   const router = useRouter();
 
-  const assets = useMemo(() => assetsResponse?.data.items || [], [assetsResponse?.data]);
+  const findings = useMemo(() => findingResponse?.data.items || [], [findingResponse?.data]);
 
-  const addAssetsDialogOpenHandler = useCallback(() => {
+  const addFindingDialogOpenHandler = useCallback(() => {
     setOpenDialog(true);
   }, []);
 
-  const onAssetsEditHandler = useCallback(async (context: IAsset) => {
+  const onFindingEditHandler = useCallback(async (context: IAsset) => {
     setOpenDialog(true);
-    setAssetsDialogContext(context);
+    setFindingDialogContext(context);
   }, []);
 
-  const onAssetsDeleteHandler = useCallback(
-    async (id: string) => {
-      Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'No, cancel!',
-        reverseButtons: true,
-        iconColor: theme.palette.primary.main,
-        color: theme.palette.text.primary,
-        cancelButtonColor: theme.palette.error.main,
-        confirmButtonColor: theme.palette.success.main,
-        background: theme.palette.background.paper,
-        showConfirmButton: true,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire({
-            title: 'Deleted!',
-            text: 'Your asset has been deleted.',
-            icon: 'success',
-            color: theme.palette.text.primary,
-            showCloseButton: true,
-            showConfirmButton: false,
-            background: theme.palette.background.paper,
-          }).then(() => {
-            deleteAsset({ assetId: id });
-          });
-        }
-      });
-    },
-    [
-      deleteAsset,
-      theme.palette.background.paper,
-      theme.palette.error.main,
-      theme.palette.primary.main,
-      theme.palette.success.main,
-      theme.palette.text.primary,
-    ]
-  );
-
-  const onAssetShowHandler = useCallback(
+  const onFindingShowHandler = useCallback(
     (id: string) => {
-      const url = `${paths.dashboard.assets}/${id}`;
+      const url = `${paths.dashboard.findings}/${id}`;
       router.push(url);
     },
     [router]
   );
 
-  const onAssetsDialogCloseHandler = useCallback(() => {
+  const onFindingDialogCloseHandler = useCallback(() => {
     setOpenDialog(false);
-    setAssetsDialogContext(null);
+    setFindingDialogContext(null);
   }, []);
 
   return (
@@ -105,12 +61,12 @@ export function Findings() {
           variant="contained"
           color="primary"
           size="large"
-          onClick={() => addAssetsDialogOpenHandler()}
+          onClick={() => addFindingDialogOpenHandler()}
         >
           Create New Findings
         </Button>
       </Box>
-      {assets.length ? (
+      {findings.length ? (
         <Box
           sx={{
             mt: 5,
@@ -139,10 +95,10 @@ export function Findings() {
           </Box>
 
           <AssetsTable
-            assets={assets}
-            onEdit={onAssetsEditHandler}
-            onDelete={onAssetsDeleteHandler}
-            onShow={onAssetShowHandler}
+            assets={findings}
+            onEdit={onFindingEditHandler}
+            onDelete={() => {}}
+            onShow={onFindingShowHandler}
           />
         </Box>
       ) : (
@@ -150,8 +106,8 @@ export function Findings() {
       )}
       <AddEditFindingDialog
         open={openDialog}
-        context={assetsDialogContext}
-        onClose={onAssetsDialogCloseHandler}
+        context={findingDialogContext}
+        onClose={onFindingDialogCloseHandler}
       />
     </Container>
   );
