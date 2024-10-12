@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { IUser } from './user';
 
 export enum FindingStateEnum {
@@ -8,20 +9,20 @@ export enum FindingStateEnum {
   CARRIED_OVER = 'CARRIED_OVER',
 }
 
-export enum SeverityEnum {
-  HIGH = 'HIGH',
-  LOW = 'LOW',
-  MEDIUM = 'MEDIUM',
-  CRITICAL = 'CRITICAL',
-}
+export const SeverityTypeEnumObject = z.enum(['HIGH', 'LOW', 'MEDIUM', 'CRITICAL']);
 
-export enum CategoryEnum {
-  CWE_991 = 'CWE_991',
-  CWE_992 = 'CWE_992',
-  CWE_993 = 'CWE_993',
-  CWE_994 = 'CWE_994',
-  CWE_995 = 'CWE_995',
-}
+export const CategoryTypeEnumObject = z.enum([
+  'CWE_991',
+  'CWE_991',
+  'CWE_991',
+  'CWE_991',
+  'CWE_991',
+]);
+
+export const SeverityEnum = SeverityTypeEnumObject.enum;
+export const CategoryEnum = CategoryTypeEnumObject.enum;
+export type TCategoryEnum = z.infer<typeof CategoryTypeEnumObject>;
+export type TSeverityEnum = z.infer<typeof SeverityTypeEnumObject>;
 
 export interface IFinding {
   id: string;
@@ -31,8 +32,8 @@ export interface IFinding {
   note: string;
   impact: string;
   state: FindingStateEnum;
-  severity: SeverityEnum;
-  category: CategoryEnum;
+  severity: TSeverityEnum;
+  category: TCategoryEnum;
   user: IUser;
   createdAt: string;
   updatedAt: string;

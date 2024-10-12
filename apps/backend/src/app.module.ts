@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AssetsModule } from './assets/assets.module';
 import { PentestModule } from './pentest/pentest.module';
+import { FindingModule } from './finding/finding.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { PentestModule } from './pentest/pentest.module';
     AuthModule,
     AssetsModule,
     PentestModule,
+    FindingModule,
   ],
   controllers: [],
   providers: [],

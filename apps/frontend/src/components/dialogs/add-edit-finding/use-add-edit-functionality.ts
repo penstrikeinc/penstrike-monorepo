@@ -82,8 +82,8 @@ export const useAddEditFindingFunctionality = (params: IParams) => {
     async (data: TFinding) => {
       const payload = {
         ...data,
-        category: data.pentest.value,
-        severity: data.pentest.value,
+        category: data.category.value,
+        severity: data.severity.value,
         pentest: data.pentest.value,
       };
 
