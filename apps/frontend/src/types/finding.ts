@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { IUser } from './user';
+import { IPentest } from './pentest';
 
 export enum FindingStateEnum {
   PENDING_FIX = 'PENDING_FIX',
@@ -35,6 +36,9 @@ export interface IFinding {
   severity: TSeverityEnum;
   category: TCategoryEnum;
   user: IUser;
+  reproduce: string;
+  concept: string;
+  pentest: IPentest;
   createdAt: string;
   updatedAt: string;
 }

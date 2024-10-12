@@ -12,7 +12,7 @@ import { FaPlus, FaSearch } from 'react-icons/fa';
 import { useCallback, useMemo, useState } from 'react';
 import { useSettingsContext } from 'src/components/settings';
 import { AddEditFindingDialog, FindingsTable, NotFoundCard } from 'src/components';
-import { useGetAllAssetQuery } from 'src/services';
+import { useGetAllFindingQuery } from 'src/services';
 import { IAsset } from 'src/types';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'next/navigation';
@@ -21,7 +21,7 @@ export function Findings() {
   const settings = useSettingsContext();
   const [openDialog, setOpenDialog] = useState(false);
   const [findingDialogContext, setFindingDialogContext] = useState<IAsset | null>(null);
-  const { data: findingResponse } = useGetAllAssetQuery();
+  const { data: findingResponse } = useGetAllFindingQuery();
   const theme = useTheme();
 
   const router = useRouter();
@@ -89,7 +89,7 @@ export function Findings() {
             />
           </Box>
 
-          {/* <FindingsTable findings={findings} onShow={onFindingShowHandler} /> */}
+          <FindingsTable findings={findings} onShow={onFindingShowHandler} />
         </Box>
       ) : (
         <NotFoundCard entity="Finding" />

@@ -46,7 +46,6 @@ export function FindingsTable(params: IProps) {
                 <TableCell align="left">
                   {' '}
                   <Chip label={finding.severity} variant="outlined" />
-                  {finding.state}
                 </TableCell>
                 <TableCell align="center">
                   <Chip label={finding.state} variant="outlined" />
@@ -54,7 +53,7 @@ export function FindingsTable(params: IProps) {
                 <TableCell align="center">
                   <Chip label={finding.category} variant="outlined" />
                 </TableCell>
-                <TableCell align="left">{finding.user.firstName}</TableCell>
+                <TableCell align="left">{finding.pentest.assignedBy?.firstName}</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -34,7 +34,9 @@ export class FindingService {
   }
 
   async findAll() {
-    const findings = await this.findingRepository.find();
+    const findings = await this.findingRepository.find({
+      relations: { pentest: { assignedBy: true }, user: true },
+    });
     return {
       items: findings,
       meta: {
