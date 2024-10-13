@@ -5,11 +5,14 @@ import { Chip, Divider, Grid, Stack, Typography } from '@mui/material';
 
 interface IProps {
   finding: IFinding;
+  compact?: boolean;
 }
 
 export function FindingDetails(params: IProps) {
-  const { finding } = params;
+  const { finding, compact } = params;
   const theme = useTheme();
+
+  const assets = finding.pentest?.assets || [];
 
   return (
     <Grid>
@@ -19,9 +22,13 @@ export function FindingDetails(params: IProps) {
       <Stack direction="row" spacing={2} sx={{ mt: 1 }}>
         <Chip label={finding.category} color="warning" variant="outlined" />
         <Chip label={finding.severity} color="error" variant="outlined" />
-        <Chip label={`${finding.pentest.assets.length} assets`} variant="soft" />
-        <Chip label="Quick Efforts" variant="soft" />
-        <Chip label="6.8CVSS" variant="soft" />
+        {!compact && (
+          <>
+            <Chip label={`${assets.length} assets`} variant="soft" />
+            <Chip label="Quick Efforts" variant="soft" />
+            <Chip label="6.8CVSS" variant="soft" />
+          </>
+        )}
       </Stack>
       <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
         {finding.description}

@@ -30,7 +30,6 @@ export interface IFinding {
   name: string;
   description: string;
   host: string;
-  note: string;
   impact: string;
   state: FindingStateEnum;
   severity: TSeverityEnum;
