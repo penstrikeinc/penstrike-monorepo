@@ -48,6 +48,7 @@ export class FindingService {
   async findOne(id: string) {
     return await this.findingRepository.findOne({
       where: { id },
+      relations: { pentest: { assets: true, assignedBy: true }, user: true },
     });
   }
 }
