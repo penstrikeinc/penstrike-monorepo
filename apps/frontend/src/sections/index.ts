@@ -6,3 +6,4 @@ export * from './auth';
 export * from './asset-details';
 export * from './findings';
 export * from './pentest-details';
+export * from './finding-details';

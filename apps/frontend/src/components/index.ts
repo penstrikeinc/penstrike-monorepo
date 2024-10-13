@@ -16,3 +16,4 @@ export * from './findings-table';
 export * from './category-dropdown';
 export * from './severity-dropdown';
 export * from './pentest-dropdown';
+export * from './finding-details';

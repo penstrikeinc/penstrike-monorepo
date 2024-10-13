@@ -1,0 +1,49 @@
+import * as React from 'react';
+import { useTheme } from '@mui/material/styles';
+import { IFinding } from 'src/types';
+import { Chip, Divider, Grid, Stack, Typography } from '@mui/material';
+
+interface IProps {
+  finding: IFinding;
+}
+
+export function FindingDetails(params: IProps) {
+  const { finding } = params;
+  const theme = useTheme();
+
+  return (
+    <Grid>
+      <Typography variant="h4" fontWeight="bold">
+        {finding.name}
+      </Typography>
+      <Stack direction="row" spacing={2} sx={{ mt: 1 }}>
+        <Chip label={finding.category} color="warning" variant="outlined" />
+        <Chip label={finding.severity} color="error" variant="outlined" />
+        <Chip label={`${finding.pentest.assets.length} assets`} variant="soft" />
+        <Chip label="Quick Efforts" variant="soft" />
+        <Chip label="6.8CVSS" variant="soft" />
+      </Stack>
+      <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+        {finding.description}
+      </Typography>
+      <Divider sx={{ my: 2 }} />
+      <Typography variant="h6" fontWeight="bold">
+        Affected User Host{' '}
+        <Chip label={finding.host} variant="soft" sx={{ color: theme.palette.text.primary }} />
+      </Typography>
+      <Divider sx={{ my: 2 }} />
+      <Typography variant="body2" color="text.secondary">
+        Step to Reproduce : {finding.reproduce}
+      </Typography>
+      <Divider sx={{ my: 2 }} />
+      <Typography variant="body2" color="text.secondary">
+        Impact: {finding.reproduce}
+      </Typography>
+      <Divider sx={{ my: 2 }} />
+      <Typography variant="body2" color="text.secondary">
+        Proof of Concept: {finding.reproduce}
+      </Typography>
+      <Divider sx={{ my: 2 }} />
+    </Grid>
+  );
+}
