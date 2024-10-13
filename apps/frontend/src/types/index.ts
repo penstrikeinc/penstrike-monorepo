@@ -4,3 +4,4 @@ export * from './user';
 export * from './pageable-response';
 export * from './pentest';
 export * from './finding';
+export * from './color-enum';
