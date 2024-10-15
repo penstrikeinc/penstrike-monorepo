@@ -60,12 +60,18 @@ export class CommentService {
     };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
+  async findOne(id: string) {
+    return await this.commentRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`;
+  async update(id: string, updateCommentDto: UpdateCommentDto) {
+    const comment = await this.findOne(id);
+
+    if (!comment) {
+      throw new BadRequestException(`Comment not found with this ${id}`);
+    }
+
+    return await this.commentRepository.update(id, updateCommentDto);
   }
 
   remove(id: number) {

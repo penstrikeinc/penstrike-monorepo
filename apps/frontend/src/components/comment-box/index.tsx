@@ -1,6 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Box, TextField, Button, Typography, Grid } from '@mui/material';
-import { useCreateCommentMutation, useGetCommentsQuery } from 'src/services';
+import {
+  useCreateCommentMutation,
+  useGetCommentsQuery,
+  useUpdateCommentMutation,
+} from 'src/services';
 import { CommentCard } from '../cards';
 
 interface IProps {
@@ -12,6 +16,7 @@ const CommentBox = (params: IProps) => {
   const [comment, setComment] = useState<string>('');
   const { mutateAsync: createComment } = useCreateCommentMutation();
   const { data: commentsRes } = useGetCommentsQuery({ findingId });
+  const { mutateAsync: updateComment } = useUpdateCommentMutation();
 
   const comments = useMemo(() => commentsRes?.data.items || [], [commentsRes?.data]);
 
@@ -26,13 +31,36 @@ const CommentBox = (params: IProps) => {
     }
   }, [comment, createComment, findingId]);
 
+  const handleEdit = useCallback(
+    ({ id, content }: { id: string; content: string }) => {
+      updateComment({
+        commentId: id,
+        content,
+      });
+    },
+    [updateComment]
+  );
+
+  const handleDelate = useCallback(
+    (id: string) => {
+      if (comment.trim()) {
+        const payload = {
+          findingId,
+          massage: comment,
+        };
+        createComment(payload);
+      }
+    },
+    [comment, createComment, findingId]
+  );
+
   return (
     <Box>
       {comments.length > 0 && (
         <Grid container spacing={2} my={2}>
           {comments.map((com) => (
             <Grid item xs={12} sm={12} key={com.id}>
-              <CommentCard comment={com} />
+              <CommentCard comment={com} onEdit={handleEdit} onDelete={handleDelate} />
             </Grid>
           ))}
         </Grid>

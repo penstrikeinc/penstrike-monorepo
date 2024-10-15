@@ -1,15 +1,20 @@
 import { IComment } from 'src/types';
 import React from 'react';
-import { Card, CardContent, Avatar, Typography, Box, Chip } from '@mui/material';
+import { Card, CardContent, Avatar, Typography, Box, Chip, CardActions } from '@mui/material';
 import { fDateTime } from 'src/utils';
 
 interface IParams {
   comment: IComment;
+  onEdit: ({ id, content }: { id: string; content: string }) => void;
+  onDelete: (id: string) => void;
 }
 
 export const CommentCard = (props: IParams) => {
   const {
+    onDelete,
+    onEdit,
     comment: {
+      id,
       massage,
       createdAt: date,
       user: { firstName, lastName, userType },
@@ -54,7 +59,7 @@ export const CommentCard = (props: IParams) => {
           </Typography>
         </CardContent>
 
-        <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+        <CardActions sx={{ display: 'flex', justifyContent: 'flex-start', p: 0.5 }}>
           <Typography
             variant="caption"
             color="primary"
@@ -62,7 +67,23 @@ export const CommentCard = (props: IParams) => {
           >
             Reply
           </Typography>
-        </Box>
+          <Typography
+            variant="caption"
+            color="primary"
+            onClick={() => onEdit({ id, content: 'test 10' })}
+            sx={{ cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
+          >
+            Edit
+          </Typography>
+          <Typography
+            variant="caption"
+            color="primary"
+            onClick={() => onDelete(id)}
+            sx={{ cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
+          >
+            Remove
+          </Typography>
+        </CardActions>
       </Box>
     </Card>
   );

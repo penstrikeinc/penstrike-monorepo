@@ -1,15 +1,14 @@
 import { useSnackbar } from 'notistack';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { TFinding } from 'src/schemas';
 import { ENTITY } from './entity';
 import { useAxios } from '../use-axios';
 import {} from './use-get-info-query';
 import { getCommentQueryKey } from './use-get-all-query';
 
 interface IUpdateParam {
-  findingId: string;
-  payload: TFinding;
+  commentId: string;
+  content: string;
 }
 
 export const useUpdateCommentMutation = () => {
@@ -19,8 +18,8 @@ export const useUpdateCommentMutation = () => {
 
   const mutationFn = useCallback(
     async (data: IUpdateParam) => {
-      const { findingId, payload } = data;
-      return axios.patch(`${ENTITY}/${findingId}`, payload);
+      const { commentId, content } = data;
+      return axios.patch(`${ENTITY}/${commentId}`, { massage: content });
     },
     [axios]
   );
