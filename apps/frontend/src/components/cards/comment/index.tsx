@@ -1,6 +1,6 @@
 import { IComment } from 'src/types';
 import React from 'react';
-import { Card, CardContent, Avatar, Typography, Box } from '@mui/material';
+import { Card, CardContent, Avatar, Typography, Box, Chip } from '@mui/material';
 import { fDateTime } from 'src/utils';
 
 interface IParams {
@@ -12,7 +12,7 @@ export const CommentCard = (props: IParams) => {
     comment: {
       massage,
       createdAt: date,
-      user: { firstName, lastName },
+      user: { firstName, lastName, userType },
     },
   } = props;
   const commentedName = `${firstName} ${lastName}`;
@@ -35,15 +35,21 @@ export const CommentCard = (props: IParams) => {
 
       <Box sx={{ flexGrow: 1 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-            {commentedName}
+          <Typography variant="body2">
+            {commentedName}{' '}
+            <Chip
+              size="small"
+              variant="outlined"
+              label={userType.toLocaleLowerCase()}
+              sx={{ textTransform: 'capitalize', ml: 1, fontSize: 11 }}
+            />
           </Typography>
           <Typography variant="caption" color="textSecondary">
             commented on {fDateTime(date)}
           </Typography>
         </Box>
-        <CardContent sx={{ p: 0, pb: 1 }}>
-          <Typography variant="body2" color="textPrimary">
+        <CardContent sx={{ p: 0, py: 1 }}>
+          <Typography variant="body1" color="textPrimary">
             {massage}
           </Typography>
         </CardContent>
