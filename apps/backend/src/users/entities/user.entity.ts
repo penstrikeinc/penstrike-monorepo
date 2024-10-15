@@ -1,4 +1,5 @@
 import { Asset } from 'src/assets/entities/asset.entity';
+import { Comment } from 'src/comment/entities/comment.entity';
 import { Pentest } from 'src/pentest/entities/pentest.entity';
 import { UserTypeEnum } from 'src/types';
 import {
@@ -49,6 +50,9 @@ export class User {
 
   @OneToMany(() => Pentest, (pentest) => pentest.assignedBy)
   assignedPentests?: Pentest[];
+
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comments?: Comment[];
 
   @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })
   createdAt: string;

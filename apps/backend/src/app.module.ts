@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { AssetsModule } from './assets/assets.module';
 import { PentestModule } from './pentest/pentest.module';
 import { FindingModule } from './finding/finding.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { FindingModule } from './finding/finding.module';
     AssetsModule,
     PentestModule,
     FindingModule,
+    CommentModule,
   ],
   controllers: [],
   providers: [],

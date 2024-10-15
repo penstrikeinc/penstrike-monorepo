@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
 import { IFinding } from 'src/types';
-import { Chip, Divider, Grid, Stack, Typography } from '@mui/material';
+import { Box, Chip, Divider, Grid, Stack, Typography } from '@mui/material';
+import CommentBox from '../comment-box';
 
 interface IProps {
   finding: IFinding;
@@ -13,6 +14,7 @@ export function FindingDetails(params: IProps) {
   const theme = useTheme();
 
   const assets = finding.pentest?.assets || [];
+  const findingId = finding.id;
 
   return (
     <Grid>
@@ -51,6 +53,13 @@ export function FindingDetails(params: IProps) {
         Proof of Concept: {finding.reproduce}
       </Typography>
       <Divider sx={{ my: 2 }} />
+
+      <Box>
+        <Typography variant="h6" fontWeight="bold" mb={2}>
+          Discussion
+        </Typography>
+        <CommentBox findingId={findingId} />
+      </Box>
     </Grid>
   );
 }

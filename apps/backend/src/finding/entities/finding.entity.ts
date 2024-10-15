@@ -1,3 +1,4 @@
+import { Comment } from 'src/comment/entities/comment.entity';
 import { Pentest } from 'src/pentest/entities/pentest.entity';
 import { CategoryEnum, FindingStateEnum, SeverityEnum } from 'src/types';
 import { User } from 'src/users/entities/user.entity';
@@ -6,6 +7,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -47,6 +49,9 @@ export class Finding {
 
   @ManyToOne(() => User, (user) => user.pentest)
   user: User;
+
+  @OneToMany(() => Comment, (comment) => comment.finding)
+  comments?: Comment[];
 
   @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })
   createdAt: string;
