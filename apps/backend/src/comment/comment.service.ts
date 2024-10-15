@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Comment } from './entities/comment.entity';
+import { FilterCommentDto } from './dto/filter-comment.dto';
 
 @Injectable()
 export class CommentService {
@@ -27,7 +28,6 @@ export class CommentService {
       massage: createCommentDto.massage,
       finding: { id: createCommentDto.findingId },
       user: { id: userId },
-      // parentId: { id: createCommentDto.parentId ?? undefined },
     };
 
     const newComment = this.commentRepository.create(payload);
@@ -35,8 +35,29 @@ export class CommentService {
     return this.commentRepository.save(newComment);
   }
 
-  findAll() {
-    return `This action returns all comment`;
+  async findAll({
+    userId,
+    filterDto,
+  }: {
+    userId: string;
+    filterDto: FilterCommentDto;
+  }) {
+    const { findingId } = filterDto;
+
+    const comments = await this.commentRepository.find({
+      where: { user: { id: userId }, finding: { id: findingId } },
+      relations: { user: true, finding: true },
+    });
+
+    if (!comments) {
+      throw new BadRequestException('Comments not found');
+    }
+    return {
+      items: comments,
+      meta: {
+        count: comments.length,
+      },
+    };
   }
 
   findOne(id: number) {

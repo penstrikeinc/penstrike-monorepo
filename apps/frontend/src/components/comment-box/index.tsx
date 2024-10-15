@@ -1,6 +1,7 @@
-import React, { useCallback, useState } from 'react';
-import { Box, TextField, Button, Typography } from '@mui/material';
-import { useCreateCommentMutation } from 'src/services';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Box, TextField, Button, Typography, Grid } from '@mui/material';
+import { useCreateCommentMutation, useGetCommentsQuery } from 'src/services';
+import { CommentCard } from '../cards';
 
 interface IProps {
   findingId: string;
@@ -9,8 +10,10 @@ interface IProps {
 const CommentBox = (params: IProps) => {
   const { findingId } = params;
   const [comment, setComment] = useState<string>('');
-  const [comments, setComments] = useState<string[]>([]);
   const { mutateAsync: createComment } = useCreateCommentMutation();
+  const { data: commentsRes } = useGetCommentsQuery({ findingId });
+
+  const comments = useMemo(() => commentsRes?.data.items || [], [commentsRes?.data]);
 
   const handleSubmit = useCallback(() => {
     if (comment.trim()) {
@@ -18,28 +21,21 @@ const CommentBox = (params: IProps) => {
         findingId,
         massage: comment,
       };
+      setComment('');
       createComment(payload);
-
-      setComments([...comments, comment]);
-      setComment(''); // Clear the input after submission
     }
-  }, [comment, comments, createComment, findingId]);
+  }, [comment, createComment, findingId]);
 
   return (
-    <Box
-      sx={{
-        width: '100%',
-      }}
-    >
+    <Box>
       {comments.length > 0 && (
-        <Box mt={3}>
-          <Typography variant="body2">Comments:</Typography>
-          {comments.map((c, index) => (
-            <Box key={index} mt={2} p={2} sx={{ borderRadius: 1 }}>
-              <Typography>{c}</Typography>
-            </Box>
+        <Grid container spacing={2} my={2}>
+          {comments.map((com) => (
+            <Grid item xs={12} sm={12} key={com.id}>
+              <CommentCard comment={com} />
+            </Grid>
           ))}
-        </Box>
+        </Grid>
       )}
 
       <Typography variant="body2" fontWeight="bold">

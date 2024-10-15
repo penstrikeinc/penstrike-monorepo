@@ -14,6 +14,7 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 import { GetUser } from 'src/auth/decorator/user';
 import { IJwtPayload } from 'src/types';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { FilterCommentDto } from './dto/filter-comment.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('comment')
@@ -29,8 +30,8 @@ export class CommentController {
   }
 
   @Get()
-  findAll() {
-    return this.commentService.findAll();
+  findAll(@Body() filterDto: FilterCommentDto, @GetUser() user: IJwtPayload) {
+    return this.commentService.findAll({ userId: user.id, filterDto });
   }
 
   @Get(':id')

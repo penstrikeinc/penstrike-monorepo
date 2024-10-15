@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateCommentDto {
   @IsString()
@@ -6,10 +6,12 @@ export class CreateCommentDto {
   massage: string;
 
   @IsString()
+  @IsUUID()
   @IsNotEmpty()
   findingId: string;
 
   @IsString()
+  @IsUUID()
   @IsOptional()
   parentId?: string;
 }
