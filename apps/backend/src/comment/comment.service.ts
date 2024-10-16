@@ -68,13 +68,23 @@ export class CommentService {
     const comment = await this.findOne(id);
 
     if (!comment) {
-      throw new BadRequestException(`Comment not found with this ${id}`);
+      throw new BadRequestException(
+        `Comment not found with this comment Id: ${id}`,
+      );
     }
 
     return await this.commentRepository.update(id, updateCommentDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+  async remove(id: string) {
+    const comment = await this.findOne(id);
+
+    if (!comment) {
+      throw new BadRequestException(
+        `Comment not found with this comment Id: ${id}`,
+      );
+    }
+
+    return await this.commentRepository.delete(id);
   }
 }

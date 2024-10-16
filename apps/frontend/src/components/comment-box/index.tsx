@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Box, TextField, Typography, Grid } from '@mui/material';
 import {
   useCreateCommentMutation,
+  useDeleteCommentMutation,
   useGetCommentsQuery,
   useUpdateCommentMutation,
 } from 'src/services';
@@ -18,9 +19,10 @@ const CommentBox = (params: IProps) => {
   const [comment, setComment] = useState<string>('');
   const [commentContext, setCommentContext] = useState<IComment | null>(null);
 
-  const { mutateAsync: createComment, status } = useCreateCommentMutation();
+  const { mutateAsync: createComment } = useCreateCommentMutation();
   const { data: commentsRes } = useGetCommentsQuery({ findingId });
   const { mutateAsync: updateComment } = useUpdateCommentMutation();
+  const { mutateAsync: deleteComment } = useDeleteCommentMutation();
   const isEditMode = Boolean(commentContext);
 
   const comments = useMemo(() => commentsRes?.data.items || [], [commentsRes?.data]);
@@ -62,15 +64,9 @@ const CommentBox = (params: IProps) => {
 
   const handleDelate = useCallback(
     (id: string) => {
-      if (comment.trim()) {
-        const payload = {
-          findingId,
-          massage: comment,
-        };
-        createComment(payload);
-      }
+      deleteComment(id);
     },
-    [comment, createComment, findingId]
+    [deleteComment]
   );
 
   const onSubmit = isEditMode ? handleUpdate : handleSubmit;
