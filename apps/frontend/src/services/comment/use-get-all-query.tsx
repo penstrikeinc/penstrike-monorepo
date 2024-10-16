@@ -8,14 +8,9 @@ interface IParams {
   parentId?: string;
 }
 
-export const getCommentQueryKey = (params?: IParams) => {
-  if (params) {
-    return [ENTITY, params];
-  }
-  return [ENTITY];
-};
+export const getCommentQueryKey = (params: IParams) => [ENTITY, params];
 
-export const useGetCommentsQuery = (params?: IParams) => {
+export const useGetCommentsQuery = (params: IParams) => {
   const { axios } = useAxios();
 
   return useQuery<PageableResponseFe<IComment>>({

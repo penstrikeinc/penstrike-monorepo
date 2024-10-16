@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
@@ -30,7 +31,7 @@ export class CommentController {
   }
 
   @Get()
-  findAll(@Body() filterDto: FilterCommentDto, @GetUser() user: IJwtPayload) {
+  findAll(@Query() filterDto: FilterCommentDto, @GetUser() user: IJwtPayload) {
     return this.commentService.findAll({ userId: user.id, filterDto });
   }
 
