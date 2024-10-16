@@ -20,16 +20,12 @@ export class CommentService {
     createCommentDto: CreateCommentDto;
     userId: string;
   }) {
-    if (createCommentDto.parentId) {
-      return 'This action adds a new comment with parent';
-    }
-
     const payload = {
       massage: createCommentDto.massage,
       finding: { id: createCommentDto.findingId },
       user: { id: userId },
+      parentId: createCommentDto.parentId ?? null,
     };
-
     const newComment = this.commentRepository.create(payload);
 
     return this.commentRepository.save(newComment);

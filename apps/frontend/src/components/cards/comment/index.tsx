@@ -6,11 +6,12 @@ import { fDateTime } from 'src/utils';
 interface IParams {
   comment: IComment;
   onEdit: (comment: IComment) => void;
+  onReply: (comment: IComment) => void;
   onDelete: (id: string) => void;
 }
 
 export const CommentCard = (props: IParams) => {
-  const { onDelete, onEdit, comment } = props;
+  const { onDelete, onEdit, onReply, comment } = props;
 
   const {
     id,
@@ -61,6 +62,7 @@ export const CommentCard = (props: IParams) => {
           <Typography
             variant="caption"
             color="primary"
+            onClick={() => onReply(comment)}
             sx={{ cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
           >
             Reply
