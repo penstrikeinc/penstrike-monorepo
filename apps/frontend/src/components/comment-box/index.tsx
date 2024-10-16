@@ -1,10 +1,12 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Box, TextField, Button, Typography, Grid } from '@mui/material';
+import { Box, TextField, Typography, Grid } from '@mui/material';
 import {
   useCreateCommentMutation,
   useGetCommentsQuery,
   useUpdateCommentMutation,
 } from 'src/services';
+import { IComment } from 'src/types';
+import { LoadingButton } from '@mui/lab';
 import { CommentCard } from '../cards';
 
 interface IProps {
@@ -14,9 +16,12 @@ interface IProps {
 const CommentBox = (params: IProps) => {
   const { findingId } = params;
   const [comment, setComment] = useState<string>('');
-  const { mutateAsync: createComment } = useCreateCommentMutation();
+  const [commentContext, setCommentContext] = useState<IComment | null>(null);
+
+  const { mutateAsync: createComment, status } = useCreateCommentMutation();
   const { data: commentsRes } = useGetCommentsQuery({ findingId });
   const { mutateAsync: updateComment } = useUpdateCommentMutation();
+  const isEditMode = Boolean(commentContext);
 
   const comments = useMemo(() => commentsRes?.data.items || [], [commentsRes?.data]);
 
@@ -26,20 +31,34 @@ const CommentBox = (params: IProps) => {
         findingId,
         massage: comment,
       };
-      setComment('');
-      createComment(payload);
+      createComment(payload, {
+        onSuccess: () => {
+          setComment('');
+        },
+      });
     }
   }, [comment, createComment, findingId]);
 
-  const handleEdit = useCallback(
-    ({ id, content }: { id: string; content: string }) => {
-      updateComment({
-        commentId: id,
-        content,
+  const handleUpdate = useCallback(() => {
+    if (comment.trim()) {
+      const payload = {
+        commentId: `${commentContext?.id}`,
+        content: comment,
+      };
+      updateComment(payload, {
+        onSuccess: () => {
+          setCommentContext(null);
+          setComment('');
+        },
       });
-    },
-    [updateComment]
-  );
+    }
+  }, [comment, commentContext?.id, updateComment]);
+
+  const handleEdit = useCallback((data: IComment) => {
+    const { massage } = data;
+    setCommentContext(data);
+    setComment(massage);
+  }, []);
 
   const handleDelate = useCallback(
     (id: string) => {
@@ -53,6 +72,8 @@ const CommentBox = (params: IProps) => {
     },
     [comment, createComment, findingId]
   );
+
+  const onSubmit = isEditMode ? handleUpdate : handleSubmit;
 
   return (
     <Box>
@@ -75,16 +96,22 @@ const CommentBox = (params: IProps) => {
         fullWidth
         multiline
         rows={2}
+        focused
         value={comment}
         onChange={(e) => setComment(e.target.value)}
         sx={{ my: 2 }}
         placeholder="Enter your comment here"
         InputProps={{
           endAdornment: (
-            <Button size="large" variant="contained" color="primary" onClick={handleSubmit}>
-              Submit
-            </Button>
+            <LoadingButton size="large" variant="contained" color="primary" onClick={onSubmit}>
+              {isEditMode ? 'Update' : 'Submit'}
+            </LoadingButton>
           ),
+        }}
+        onKeyUp={(event) => {
+          if (event.key.toLowerCase() === 'enter') {
+            onSubmit();
+          }
         }}
       />
     </Box>

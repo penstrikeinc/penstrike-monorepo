@@ -5,21 +5,19 @@ import { fDateTime } from 'src/utils';
 
 interface IParams {
   comment: IComment;
-  onEdit: ({ id, content }: { id: string; content: string }) => void;
+  onEdit: (comment: IComment) => void;
   onDelete: (id: string) => void;
 }
 
 export const CommentCard = (props: IParams) => {
+  const { onDelete, onEdit, comment } = props;
+
   const {
-    onDelete,
-    onEdit,
-    comment: {
-      id,
-      massage,
-      createdAt: date,
-      user: { firstName, lastName, userType },
-    },
-  } = props;
+    id,
+    massage,
+    createdAt: date,
+    user: { firstName, lastName, userType },
+  } = comment;
   const commentedName = `${firstName} ${lastName}`;
 
   return (
@@ -54,7 +52,7 @@ export const CommentCard = (props: IParams) => {
           </Typography>
         </Box>
         <CardContent sx={{ p: 0, py: 1 }}>
-          <Typography variant="body1" color="textPrimary">
+          <Typography variant="body2" color="textPrimary">
             {massage}
           </Typography>
         </CardContent>
@@ -70,7 +68,7 @@ export const CommentCard = (props: IParams) => {
           <Typography
             variant="caption"
             color="primary"
-            onClick={() => onEdit({ id, content: 'test 10' })}
+            onClick={() => onEdit(comment)}
             sx={{ cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
           >
             Edit
