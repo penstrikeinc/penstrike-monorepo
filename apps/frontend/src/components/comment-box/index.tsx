@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { Box, TextField, Typography, Grid, IconButton } from '@mui/material';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Box, TextField, Typography, IconButton } from '@mui/material';
 import {
   useCreateCommentMutation,
   useDeleteCommentMutation,
@@ -9,7 +9,8 @@ import {
 import { IComment } from 'src/types';
 import { LoadingButton } from '@mui/lab';
 import { FaX } from 'react-icons/fa6';
-import { CommentCard } from '../cards';
+import { generateCommentTree, ICommentTree } from 'src/utils';
+import { CommentTree } from '../manage-comment';
 
 interface IProps {
   findingId: string;
@@ -21,10 +22,13 @@ const CommentBox = (params: IProps) => {
   const [commentContext, setCommentContext] = useState<IComment | null>(null);
   const [commentReplyContext, setCommentReplyContext] = useState<IComment | null>(null);
 
+  const [treeData, setTreeData] = useState<ICommentTree[]>([]);
+  const [expandAll, setExpandAll] = useState<boolean>(true);
+
   const { mutateAsync: createComment } = useCreateCommentMutation();
   const { data: commentsRes } = useGetCommentsQuery({ findingId });
   const { mutateAsync: updateComment } = useUpdateCommentMutation();
-  const { mutateAsync: deleteComment } = useDeleteCommentMutation();
+  const { mutateAsync: removeComment } = useDeleteCommentMutation();
 
   const isEditMode = Boolean(commentContext);
   const isReplyMode = Boolean(commentReplyContext);
@@ -94,11 +98,11 @@ const CommentBox = (params: IProps) => {
     });
   }, [comment, commentReplyContext, createComment, findingId]);
 
-  const handleDelate = useCallback(
+  const handleRemove = useCallback(
     (id: string) => {
-      deleteComment(id);
+      removeComment(id);
     },
-    [deleteComment]
+    [removeComment]
   );
 
   const handleClearContext = useCallback(() => {
@@ -112,22 +116,28 @@ const CommentBox = (params: IProps) => {
   const onSubmitAndUpdateHandler = isEditMode ? handleUpdate : handleSubmit;
   const onSubmit = isReplyMode ? handleReplySubmit : onSubmitAndUpdateHandler;
 
+  useEffect(() => {
+    const addExpandedFlatToComments = comments?.map((item) => ({
+      ...item,
+      expanded: expandAll,
+    }));
+
+    if (addExpandedFlatToComments) {
+      const commentTree = generateCommentTree(addExpandedFlatToComments);
+      setTreeData(commentTree);
+    }
+  }, [comments, expandAll]);
+
   return (
     <Box>
-      {comments.length > 0 && (
-        <Grid container spacing={2} my={2}>
-          {comments.map((com) => (
-            <Grid item xs={12} sm={12} key={com.id}>
-              <CommentCard
-                comment={com}
-                onEdit={handleEditData}
-                onDelete={handleDelate}
-                onReply={handleReply}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      )}
+      <Box>
+        <CommentTree
+          comments={treeData}
+          onEdit={handleEditData}
+          onReply={handleReply}
+          onRemove={handleRemove}
+        />
+      </Box>
 
       <Typography variant="body2" fontWeight="bold">
         Leave a Comment

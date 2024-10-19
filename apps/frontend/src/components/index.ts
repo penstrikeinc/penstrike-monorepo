@@ -17,3 +17,4 @@ export * from './category-dropdown';
 export * from './severity-dropdown';
 export * from './pentest-dropdown';
 export * from './finding-details';
+export * from './manage-comment';
