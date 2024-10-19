@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
 import { IFinding } from 'src/types';
-import { Box, Chip, Divider, Grid, Stack, Typography } from '@mui/material';
+import { Box, Chip, Divider, Grid, Link, Stack, Typography } from '@mui/material';
 import CommentBox from '../comment-box';
 
 interface IProps {
@@ -38,20 +38,40 @@ export function FindingDetails(params: IProps) {
       <Divider sx={{ my: 2 }} />
       <Typography variant="h6" fontWeight="bold">
         Affected User Host{' '}
-        <Chip label={finding.host} variant="soft" sx={{ color: theme.palette.text.primary }} />
+        <Chip
+          label={finding.host}
+          component={Link}
+          variant="soft"
+          sx={{ color: theme.palette.text.primary }}
+        />
       </Typography>
       <Divider sx={{ my: 2 }} />
-      <Typography variant="body2" color="text.secondary">
-        Step to Reproduce : {finding.reproduce}
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="h6" fontWeight="bold">
+          Step to Reproduce
+        </Typography>
+        <Typography variant="body2" color="text.secondary" ml={1}>
+          {finding.reproduce}
+        </Typography>
+      </Box>
       <Divider sx={{ my: 2 }} />
-      <Typography variant="body2" color="text.secondary">
-        Impact: {finding.reproduce}
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="h6" fontWeight="bold">
+          Impact
+        </Typography>
+        <Typography variant="body2" color="text.secondary" ml={1}>
+          {finding.impact}
+        </Typography>
+      </Box>
       <Divider sx={{ my: 2 }} />
-      <Typography variant="body2" color="text.secondary">
-        Proof of Concept: {finding.reproduce}
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="h6" fontWeight="bold">
+          Proof of Concept
+        </Typography>
+        <Typography variant="body2" color="text.secondary" ml={1}>
+          {finding.concept}
+        </Typography>
+      </Box>
       <Divider sx={{ my: 2 }} />
 
       <Box>
