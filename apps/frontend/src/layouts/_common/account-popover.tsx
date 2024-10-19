@@ -65,13 +65,15 @@ export default function AccountPopover() {
         component={m.button}
         whileTap="tap"
         whileHover="hover"
-        variants={varHover(1.05)}
+        variants={varHover(1.01)}
         onClick={popover.onOpen}
         sx={{
-          px: 1.5,
+          py: 0.9,
+          px: 1.4,
           borderRadius: 5,
           background: (theme) => alpha(theme.palette.grey[500], 0.08),
           ...(popover.open && {
+            color: (theme) => theme.palette.grey[100],
             background: (theme) =>
               `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 100%)`,
           }),
@@ -82,9 +84,9 @@ export default function AccountPopover() {
           alt={user?.userName}
           sx={{
             mr: 1,
-            width: 46,
-            height: 46,
-            border: (theme) => `solid 2px ${theme.palette.background.default}`,
+            width: 40,
+            height: 40,
+            border: (theme) => `solid 2px ${theme.palette.background.neutral}`,
           }}
         />
 
