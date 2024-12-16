@@ -70,11 +70,12 @@ export function useNavData() {
             path: paths.dashboard.findings,
             icon: <BsShieldFillExclamation size={20} />,
           },
-          {
-            title: 'CVE Scan',
-            path: paths.dashboard.cveScan,
-            icon: <BsUpcScan size={20} />,
-          },
+          // todo next in future
+          // {
+          //   title: 'CVE Scan',
+          //   path: paths.dashboard.cveScan,
+          //   icon: <BsUpcScan size={20} />,
+          // },
           { title: 'Reports', path: paths.dashboard.reports, icon: <PiNotepadFill size={20} /> },
           {
             title: 'Billings',
