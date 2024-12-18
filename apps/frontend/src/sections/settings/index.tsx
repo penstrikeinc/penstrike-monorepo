@@ -1,12 +1,12 @@
 'use client';
 
 // @mui
-import { alpha, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
+import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 // components
 import { Typography } from '@mui/material';
-import { useSettingsContext } from 'src/components/settings';
+import { SettingItems, useSettingsContext } from 'src/components/settings';
+import Scrollbar from 'src/components/scrollbar';
 
 export function Settings() {
   const settings = useSettingsContext();
@@ -14,18 +14,18 @@ export function Settings() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      <Box
+      <Typography variant="h6">Setting Page</Typography>
+      <Scrollbar
         sx={{
-          mt: 5,
+          mt: 2,
           p: 2,
-          height: '70vh',
+          height: 'calc(100vh - 200px)',
           borderRadius: 2,
-          bgcolor: alpha(theme.palette.grey[500], 0.04),
           border: `dashed 1px ${theme.palette.divider}`,
         }}
       >
-        <Typography variant="h6">page coming soon...</Typography>
-      </Box>
+        <SettingItems />
+      </Scrollbar>
     </Container>
   );
 }
