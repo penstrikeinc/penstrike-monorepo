@@ -45,11 +45,7 @@ export function Dashboard() {
         Home
       </Typography>
 
-      <Box
-        sx={{
-          py: 5,
-        }}
-      >
+      <Box sx={{py: 5,}}>
         <Typography variant="h4" mb={3}>
           <FaHandPaper /> Welcome,{' '}
           <span style={{ color: theme.palette.primary.main }}>{user?.displayName}</span>
