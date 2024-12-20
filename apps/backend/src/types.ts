@@ -97,3 +97,29 @@ export interface IFinding {
   createdAt: string;
   updatedAt: string;
 }
+
+export type TConfigService = {
+  AUTO_LOAD_ENTITIES: boolean;
+  AWS_ACCESS_KEY: string;
+  AWS_BUCKET_NAME: string;
+  AWS_BUCKET_REGION: string;
+  AWS_ENDPOINT: string;
+  AWS_SECRET_ACCESS_KEY: string;
+  DB_HOST: string;
+  DB_NAME: string;
+  DB_PASSWORD: string;
+  DB_PORT: number;
+  DB_SYNCHRONIZE: boolean;
+  DB_USERNAME: string;
+  DEFAULT_PAGE_SIZE: number;
+  JWT_SECRET: string;
+  JWT_TOKEN_VALIDITY: string;
+  PORT: number;
+  SMTP_FROM: string;
+  SMTP_HOST: string;
+  SMTP_PASSWORD: string;
+  SMTP_PORT: string;
+  SMTP_TRANSPORT?: string;
+  SMTP_USER: string;
+};
+

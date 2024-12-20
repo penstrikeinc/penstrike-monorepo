@@ -13,10 +13,11 @@ import { IGenerateAwsS3URL } from 'src/types';
 import XHRUpload from '@uppy/xhr-upload';
 import ImageEditor from '@uppy/image-editor';
 import { findSessionToken } from 'src/utils';
+import { NEXT_PUBLIC_API_URL } from 'src/config-global';
 import { useGetDevice } from '../hooks';
 
 type TReportDest = {
-  destination: 'report';
+  destination: 'reports';
 };
 
 type TUserDest = {
@@ -58,7 +59,7 @@ export const FileUpload: React.FC<IProps> = (props) => {
   const { isMobile } = useGetDevice();
 
   const endpoint = useMemo(() => {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const baseUrl = NEXT_PUBLIC_API_URL;
     return `${baseUrl}/${asset.destination}/upload`;
   }, [asset]);
 

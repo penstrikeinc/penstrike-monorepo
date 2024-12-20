@@ -1,4 +1,5 @@
 import { Asset } from 'src/assets/entities/asset.entity';
+import { Attachment } from 'src/attachments/entities/attachments.entity';
 import { Comment } from 'src/comment/entities/comment.entity';
 import { Pentest } from 'src/pentest/entities/pentest.entity';
 import { UserTypeEnum } from 'src/types';
@@ -7,6 +8,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -53,6 +55,12 @@ export class User {
 
   @OneToMany(() => Comment, (comment) => comment.user)
   comments?: Comment[];
+
+  @ManyToOne(() => Attachment, (attachment) => attachment.profilePictures, {
+    cascade: true,
+  })
+  @JoinColumn({ name: 'picture_id' })
+  picture: Attachment;
 
   @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })
   createdAt: string;

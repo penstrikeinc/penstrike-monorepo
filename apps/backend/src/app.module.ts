@@ -7,9 +7,12 @@ import { AssetsModule } from './assets/assets.module';
 import { PentestModule } from './pentest/pentest.module';
 import { FindingModule } from './finding/finding.module';
 import { CommentModule } from './comment/comment.module';
+import { ReportsModule } from './reports/reports.module';
+import { AttachmentsModule } from './attachments/attachments.module';
 
 @Module({
   imports: [
+    AttachmentsModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [
@@ -35,6 +38,7 @@ import { CommentModule } from './comment/comment.module';
     PentestModule,
     FindingModule,
     CommentModule,
+    ReportsModule,
   ],
   controllers: [],
   providers: [],
