@@ -4,10 +4,8 @@
 
 import { Box, Button, Card, CardActions, CardContent, Container, Grid, Paper, Typography } from "@mui/material";
 // import { useSettingsContext } from "src/components/settings";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
-import ArrowDropUp from "@mui/icons-material/ArrowDropUp";
-import { alignProperty } from "@mui/material/styles/cssUtils";
+import { RiArrowUpSFill, RiArrowDownSFill  } from "react-icons/ri";
+
 
 
 
@@ -72,7 +70,7 @@ export function DashboardChart() {
               </Grid>
               <Grid item xs={6}>
                 <Paper>
-                  hellooooooo
+                  chartneeded
                 </Paper>
               </Grid>
             </Grid>
@@ -88,9 +86,9 @@ export function DashboardChart() {
                 justifyContent="center"
               >
                 {item.previousWeek >= 0 ? (
-                  <ArrowDropUp fontSize="small" style={{ marginRight: 4 }} />
+                  <RiArrowUpSFill fontSize="small" style={{ marginRight: 4 }} />
                 ) : (
-                  <ArrowDropDown fontSize="small" style={{ marginRight: 4 }} />
+                  <RiArrowDownSFill  fontSize="small" style={{ marginRight: 4 }} />
                 )}
                 {Math.abs(item.previousWeek)}% from previous week
               </Typography>
