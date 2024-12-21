@@ -1,11 +1,9 @@
-// sections
-
-import { Billings } from 'src/sections';
+import { Team } from 'src/sections';
 
 export const metadata = {
-  title: 'Dashboard: Billings',
+  title: 'Dashboard: Team',
 };
 
 export default function Page() {
-  return <Billings />;
+  return <Team />;
 }
