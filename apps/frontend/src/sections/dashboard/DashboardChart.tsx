@@ -109,6 +109,12 @@ export const DashboardChart: React.FC = () => {
     { name: "Others" },
   ];
 
+
+
+
+
+  
+
   return (
     <Container>
       <Grid container spacing={3}>
@@ -224,9 +230,9 @@ export const DashboardChart: React.FC = () => {
       </Grid>
 
       {/* Pie Chart Section */}
-      <Grid container spacing={3} sx={{ marginTop: "20px" }}>
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3} style={{ display: "flex", flexDirection: "column", padding: "10px", textAlign: "center" }}>
+      <Grid container spacing={1} sx={{ marginTop: "20px" }}>
+        <Grid item xs={12} md={5} >
+          <Paper elevation={3} style={{ display: "flex",height: "260px" , flexDirection: "column", padding: "10px", textAlign: "center" }}>
             {/* Add Pie Chart here */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", justifyItems: "center" }}>
 
@@ -249,7 +255,7 @@ export const DashboardChart: React.FC = () => {
               <ul>
 
                 {categories.map((category, index) => (
-                  <li key={index} style={{ whiteSpace: "nowrap", textAlign: "start", fontWeight: "bold" }}>
+                  <li key={index} style={{ whiteSpace: "nowrap", marginLeft: "-20px", textAlign: "start", fontWeight: "bold", fontSize: "12px" }}>
                     {category.name}
                   </li>
                 ))}
@@ -259,9 +265,9 @@ export const DashboardChart: React.FC = () => {
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <Paper elevation={3} style={{ padding: "16px" }}>
+          <Paper elevation={3} style={{ padding: "10px",height: "260px" }}>
             <div style={{ display: "flex", alignItems: "center", justifyItems: "center", justifyContent: "space-between" }}>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6" component="h6" gutterBottom >
                 Total Targeted Assets
               </Typography>
               <Button
@@ -292,7 +298,7 @@ export const DashboardChart: React.FC = () => {
                   }}
                 >
                   <Typography variant="body1">{asset.label}</Typography>
-                  <Typography variant="h6" color={blue[500]}>
+                  <Typography variant="h6" sx={{fontSize: "10px"}} color={blue[500]}>
                     {asset.value}
                   </Typography>
                 </div>
@@ -301,15 +307,76 @@ export const DashboardChart: React.FC = () => {
 
           </Paper>
         </Grid>
+        {/* Overall Risks */}
 
+<Grid item xs={12} md={3}>
+  <Paper
+    elevation={3}
+    style={{
+      padding: "16px",
+      textAlign: "center",
+      height: "260px" 
+    }}
+  >
+    <Typography variant="h6" gutterBottom>
+      Overall Risks
+    </Typography>
 
-        <Grid item xs={12} md={2}>
-          <Paper elevation={3} style={{ padding: "16px", textAlign: "center", color: "blue.A500" }}>
-            <Typography variant="h6" gutterBottom>
-              Overall Risks
-            </Typography>
-          </Paper>
-        </Grid>
+    {/* Radial Bar Chart */}
+    <div style={{ marginTop: "20px" }}>
+      <ReactApexChart
+        options={{
+          chart: {
+            height: 300,
+            type: "radialBar",
+          },
+          plotOptions: {
+            radialBar: {
+              startAngle: -90,
+              endAngle: 90,
+              hollow: {
+                size: "60%",
+              },
+              track: {
+                background: "#e7e7e7",
+                strokeWidth: "100%",
+              },
+              dataLabels: {
+                name: {
+                  show: true,
+                  offsetY: 20,
+                  color: "#888",
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                },
+                value: {
+                  show: true,
+                  fontSize: "32px",
+                  fontWeight: "bold",
+                  offsetY: -10,
+                  formatter (val) {
+                    return val.toFixed(0);
+                  },
+                },
+              },
+            },
+          },
+          fill: {
+            colors: ["#FBC02D"], // Yellow color to match your screenshot
+          },
+          stroke: {
+            lineCap: "round",
+          },
+          labels: ["High"], // Label below the value
+        }}
+        series={[3]} // Example value: 75%
+        type="radialBar"
+        height={300}
+      />
+    </div>
+  </Paper>
+</Grid>
+
       </Grid>
     </Container>
   );
