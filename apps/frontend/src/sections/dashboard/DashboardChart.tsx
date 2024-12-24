@@ -7,10 +7,12 @@
 
 import dynamic from "next/dynamic";
 import React from "react";
-import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Paper, Typography, Chip, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import { RiArrowDownSFill, RiArrowRightWideFill, RiArrowUpSFill } from "react-icons/ri";
 import { column } from "stylis";
 import { blue } from "@mui/material/colors"; // Import Material UI blue color
+import { BsBugFill } from "react-icons/bs";
+import { ApexOptions } from "apexcharts";
 
 // Dynamically import ReactApexChart to disable SSR
 const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
@@ -21,7 +23,18 @@ interface ApexChartProps {
   series: any[];
   options: any;
 }
-
+const severityColors: { [key in "Critical" | "High" | "Medium" | "Low"]: string } = {
+  Critical: "#D1101A", // Red
+  High: "#FF981E",     // Orange
+  Medium: "#FF981E",   // Green
+  Low: "#00BD18",      // Blue
+};
+interface Finding {
+  severity: "Critical" | "High" | "Medium" | "Low"; // Restrict to valid keys
+  description: string;
+  firstIdentified: string;
+  affectedAssets: number;
+}
 // ApexChart component for rendering different chart types
 const ApexChart: React.FC<ApexChartProps> = ({ type, series, options }) => <ReactApexChart options={options} series={series} type={type} width={280} />;
 
@@ -110,11 +123,74 @@ export const DashboardChart: React.FC = () => {
   ];
 
 
+  const graphChartData = {
+    series: [
+      {
+        name: "Critical",
+        data: [50, 75, 150, 100, 80, 120, 60],
+      },
+      {
+        name: "High",
+        data: [40, 60, 100, 80, 90, 70, 50],
+      },
+      {
+        name: "Medium",
+        data: [30, 45, 80, 60, 50, 40, 70],
+      },
+      {
+        name: "Low",
+        data: [20, 30, 50, 40, 30, 25, 40],
+      },
+    ],
+    options: {
+      chart: {
+        type: "bar",
+        height: 350,
+        stacked: false, // Disable stacking to create separate columns
+        toolbar: {
+          show: true,
+        },
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: "50%", // Adjust column width as needed
+        },
+      },
+      colors: ["#FF4560", "#FEB019", "#00E396", "#008FFB"], // Critical, High, Medium, Low
+      dataLabels: {
+        enabled: false,
+      },
+      xaxis: {
+        categories: ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"],
+      },
+      yaxis: {
+        title: {
+          text: "Count",
+        },
+      },
+      legend: {
+        position: "top",
+        horizontalAlign: "center",
+      },
+      fill: {
+        opacity: 1,
+      },
+      tooltip: {
+        y: {
+          formatter: (val: number) => `${val}`,
+        },
+      },
+    } as ApexOptions,
+  };
 
-
-
-  
-
+  const findings = [
+    { severity: "Critical", description: "Nettalk open session remediation", firstIdentified: "12th July 2024", affectedAssets: 32 },
+    { severity: "High", description: "Nettalk open session remediation", firstIdentified: "12th July 2024", affectedAssets: 32 },
+    { severity: "Medium", description: "Nettalk open session remediation", firstIdentified: "12th July 2024", affectedAssets: 32 },
+    { severity: "Low", description: "Nettalk open session remediation", firstIdentified: "12th July 2024", affectedAssets: 32 },
+    { severity: "Low", description: "Nettalk open session remediation", firstIdentified: "12th July 2024", affectedAssets: 32 },
+  ];
   return (
     <Container>
       <Grid container spacing={3}>
@@ -232,7 +308,7 @@ export const DashboardChart: React.FC = () => {
       {/* Pie Chart Section */}
       <Grid container spacing={1} sx={{ marginTop: "20px" }}>
         <Grid item xs={12} md={5} >
-          <Paper elevation={3} style={{ display: "flex",height: "260px" , flexDirection: "column", padding: "10px", textAlign: "center" }}>
+          <Paper elevation={3} style={{ display: "flex", height: "260px", flexDirection: "column", padding: "10px", textAlign: "center" }}>
             {/* Add Pie Chart here */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", justifyItems: "center" }}>
 
@@ -265,7 +341,7 @@ export const DashboardChart: React.FC = () => {
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <Paper elevation={3} style={{ padding: "10px",height: "260px" }}>
+          <Paper elevation={3} style={{ padding: "10px", height: "260px" }}>
             <div style={{ display: "flex", alignItems: "center", justifyItems: "center", justifyContent: "space-between" }}>
               <Typography variant="h6" component="h6" gutterBottom >
                 Total Targeted Assets
@@ -298,7 +374,7 @@ export const DashboardChart: React.FC = () => {
                   }}
                 >
                   <Typography variant="body1">{asset.label}</Typography>
-                  <Typography variant="h6" sx={{fontSize: "10px"}} color={blue[500]}>
+                  <Typography variant="h6" sx={{ fontSize: "10px" }} color={blue[500]}>
                     {asset.value}
                   </Typography>
                 </div>
@@ -309,75 +385,142 @@ export const DashboardChart: React.FC = () => {
         </Grid>
         {/* Overall Risks */}
 
-<Grid item xs={12} md={3}>
-  <Paper
-    elevation={3}
-    style={{
-      padding: "16px",
-      textAlign: "center",
-      height: "260px" 
-    }}
-  >
-    <Typography variant="h6" gutterBottom>
-      Overall Risks
-    </Typography>
+        <Grid item xs={12} md={3}>
+          <Paper
+            elevation={3}
+            style={{
+              padding: "16px",
+              textAlign: "center",
+              height: "260px"
+            }}
+          >
+            <Typography variant="h6" gutterBottom>
+              Overall Risks
+            </Typography>
 
-    {/* Radial Bar Chart */}
-    <div style={{ marginTop: "20px" }}>
-      <ReactApexChart
-        options={{
-          chart: {
-            height: 300,
-            type: "radialBar",
-          },
-          plotOptions: {
-            radialBar: {
-              startAngle: -90,
-              endAngle: 90,
-              hollow: {
-                size: "60%",
-              },
-              track: {
-                background: "#e7e7e7",
-                strokeWidth: "100%",
-              },
-              dataLabels: {
-                name: {
-                  show: true,
-                  offsetY: 20,
-                  color: "#888",
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                },
-                value: {
-                  show: true,
-                  fontSize: "32px",
-                  fontWeight: "bold",
-                  offsetY: -10,
-                  formatter (val) {
-                    return val.toFixed(0);
+            {/* Radial Bar Chart */}
+            <div style={{ marginTop: "20px" }}>
+              <ReactApexChart
+                options={{
+                  chart: {
+                    height: 300,
+                    type: "radialBar",
                   },
-                },
-              },
-            },
-          },
-          fill: {
-            colors: ["#FBC02D"], // Yellow color to match your screenshot
-          },
-          stroke: {
-            lineCap: "round",
-          },
-          labels: ["High"], // Label below the value
-        }}
-        series={[3]} // Example value: 75%
-        type="radialBar"
-        height={300}
-      />
-    </div>
-  </Paper>
-</Grid>
+                  plotOptions: {
+                    radialBar: {
+                      startAngle: -90,
+                      endAngle: 90,
+                      hollow: {
+                        size: "60%",
+                      },
+                      track: {
+                        background: "#e7e7e7",
+                        strokeWidth: "100%",
+                      },
+                      dataLabels: {
+                        name: {
+                          show: true,
+                          offsetY: 20,
+                          color: "#888",
+                          fontSize: "14px",
+                          fontWeight: "bold",
+                        },
+                        value: {
+                          show: true,
+                          fontSize: "32px",
+                          fontWeight: "bold",
+                          offsetY: -10,
+                          formatter(val) {
+                            return val.toFixed(0);
+                          },
+                        },
+                      },
+                    },
+                  },
+                  fill: {
+                    colors: ["#FBC02D"], // Yellow color to match your screenshot
+                  },
+                  stroke: {
+                    lineCap: "round",
+                  },
+                  labels: ["High"], // Label below the value
+                }}
+                series={[3]} // Example value: 75%
+                type="radialBar"
+                height={300}
+              />
+            </div>
+          </Paper>
+        </Grid>
 
       </Grid>
+
+
+      <Grid container spacing={3} sx={{ marginTop: "20px" }}>
+        <Grid item xs={12} md={6}>
+          <Paper elevation={3} style={{ padding: "10px" }}>
+            <ReactApexChart
+              options={graphChartData.options}
+              series={graphChartData.series}
+              type="bar"
+              height={350}
+            />
+
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Paper elevation={3} style={{ padding: "20px", height: "" }}>
+            <Typography variant="h6" component="h6" gutterBottom>
+              Top Findings
+            </Typography>
+            <List>
+              {findings.map((finding, index) => (
+                <ListItem key={index} sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                  {/* <Chip
+                    label={finding.severity}
+                    sx={{
+                      backgroundColor: severityColors[finding.severity],
+                      color: "#fff",
+                      minWidth: 80,
+                      textAlign: "center",
+                    }}
+                  /> */}
+
+                  <Button
+                   
+                    variant="outlined"
+                    sx={{
+                      width: "14px",
+                      borderRadius: "10px",
+                      fontSize: "11px",
+                      borderColor: severityColors[finding.severity as "Critical" | "High" | "Medium" | "Low"],
+                      color: severityColors[finding.severity as "Critical" | "High" | "Medium" | "Low"],
+                      ":hover": {
+                        backgroundColor: `${severityColors[finding.severity as "Critical" | "High" | "Medium" | "Low"]}20`,
+                      },
+                    }}
+                  >
+                    {finding?.severity}
+                  </Button>
+                  <ListItemText
+                    primary={finding.description}
+                    secondary={`First Identified: ${finding.firstIdentified}`}
+                    sx={{ flexGrow: 1 }}
+                  />
+                  <ListItemIcon>
+                    <BsBugFill  style={{color: blue[500]}}/>
+                  </ListItemIcon>
+                  <Typography variant="body2" whiteSpace="nowrap" color="text.secondary">
+                    Affected Assets: <strong>{finding.affectedAssets}</strong>
+                  </Typography>
+                </ListItem>
+              ))}
+            </List>
+          </Paper>
+        </Grid>
+
+      </Grid>
+
     </Container>
   );
 };
