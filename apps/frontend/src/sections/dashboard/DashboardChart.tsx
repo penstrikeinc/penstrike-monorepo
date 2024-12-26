@@ -29,6 +29,7 @@ const severityColors: { [key in "Critical" | "High" | "Medium" | "Low"]: string 
   Medium: "#FF981E",   // Green
   Low: "#00BD18",      // Blue
 };
+
 interface Finding {
   severity: "Critical" | "High" | "Medium" | "Low"; // Restrict to valid keys
   description: string;
@@ -113,7 +114,7 @@ export const DashboardChart: React.FC = () => {
     },
   };
 
-  // Categories for display as labels on the right side
+  // Categories for display as labels on the right side ///
   const categories = [
     { name: "Business Logic" },
     { name: "Access Control" },
