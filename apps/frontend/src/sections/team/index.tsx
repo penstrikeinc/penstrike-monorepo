@@ -6,9 +6,10 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 // components
 import { useSettingsContext } from 'src/components/settings';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Grid, Card, CardContent, CardMedia, Typography } from '@mui/material';
 import { BsPersonAdd } from 'react-icons/bs';
+import { InviteMemberDialog } from 'src/components';
 
 const teamMembers = [
   {
@@ -21,16 +22,17 @@ const teamMembers = [
   { id: 3, name: 'Charlie Brown', role: 'Designer', image: 'https://via.placeholder.com/150' },
 ];
 
-
 export function Team() {
   const settings = useSettingsContext();
   const theme = useTheme();
+  const [openDialog, setOpenDialog] = useState(false);
 
-    const handleInviteClick = () => {
-      alert('Invite team member clicked!');
-    };
+  const handleInviteClick = () => {
+    setOpenDialog(true);
+  };
 
-    return (
+  return (
+    <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 2 }}>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -73,5 +75,7 @@ export function Team() {
           </Grid>
         </Box>
       </Container>
-    );
+      <InviteMemberDialog open={openDialog} onClose={() => setOpenDialog(false)} />
+    </>
+  );
 }
