@@ -14,7 +14,7 @@ import { blue } from "@mui/material/colors"; // Import Material UI blue color
 import { BsBugFill } from "react-icons/bs";
 import { ApexOptions } from "apexcharts";
 
-// Dynamically import ReactApexChart to disable SSR
+// Dynamically import ReactApexChart to disable SSR////
 const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 // Define types for the props used in ApexChart
