@@ -84,9 +84,13 @@ export function useNavData() {
           },
           { title: 'Team', path: paths.dashboard.team, icon: <HiUserGroup size={20} /> },
           {
-            title: 'Setting',
-            path: paths.dashboard.settings,
+            title: 'Settings',
+            path: paths.dashboard.settings.root,
             icon: <Iconify icon="solar:settings-bold-duotone" width={24} />,
+            children: [
+              { title: 'profile', path: paths.dashboard.settings.root },
+              { title: 'theme', path: paths.dashboard.settings.theme },
+            ],
           },
         ],
       },

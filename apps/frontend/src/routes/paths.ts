@@ -19,6 +19,10 @@ export const paths = {
     reports: `${ROOTS.DASHBOARD}/reports`,
     billings: `${ROOTS.DASHBOARD}/billings`,
     team: `${ROOTS.DASHBOARD}/team`,
-    settings: `${ROOTS.DASHBOARD}/settings`,
+    settings: {
+      root: `${ROOTS.DASHBOARD}`,
+      profile: `${ROOTS.DASHBOARD}/settings/profile`,
+      theme: `${ROOTS.DASHBOARD}/settings/theme`,
+    },
   },
 };
