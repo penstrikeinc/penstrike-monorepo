@@ -1,17 +1,20 @@
-import { MouseEventHandler, useCallback } from 'react';
-import { useAssetFormSchema } from 'src/components/forms';
-import { assetsDefaultValues, TAssets } from 'src/schemas/assets';
-import { useCreateAssetMutation } from 'src/services';
+import { Dispatch, MouseEventHandler, SetStateAction, useCallback } from 'react';
+import { useReportFormSchema } from 'src/components/forms';
+import { reportDefaultValues, TReportFE } from 'src/schemas';
+import { useCreateReportMutation } from 'src/services/reports';
+import { IGenerateAwsS3URL } from 'src/types';
 
 export interface IParams {
   onClose: () => void;
   onError?: (error: unknown) => void;
+  imageSrc: IGenerateAwsS3URL | null;
+  setImageSrc: Dispatch<SetStateAction<IGenerateAwsS3URL | null>>;
 }
 
 export const useAddReportFunctionality = (params: IParams) => {
-  const { onClose, onError } = params;
-  const { methods } = useAssetFormSchema();
-  const { mutateAsync: createAsset } = useCreateAssetMutation();
+  const { onClose, onError, imageSrc, setImageSrc } = params;
+  const { methods } = useReportFormSchema();
+  const { mutateAsync: createReport } = useCreateReportMutation();
 
   const {
     handleSubmit,
@@ -23,15 +26,19 @@ export const useAddReportFunctionality = (params: IParams) => {
   const isDisabled = Boolean(!isValid || !isDirty);
 
   const onCloseHandler = useCallback(() => {
-    reset(assetsDefaultValues);
+    reset(reportDefaultValues);
     onClose();
-  }, [onClose, reset]);
+    setImageSrc(null);
+  }, [onClose, reset, setImageSrc]);
 
   const onCreateAssetSubmit = useCallback(
-    async (data: TAssets) => {
-      const { assets } = data;
+    async (data: TReportFE) => {
+      const payload = {
+        pentest: data.pentest.value,
+        attachment: imageSrc?.id ?? '',
+      };
 
-      createAsset(assets, {
+      createReport(payload, {
         onSuccess: (res) => {
           onCloseHandler();
         },
@@ -42,7 +49,7 @@ export const useAddReportFunctionality = (params: IParams) => {
         },
       });
     },
-    [createAsset, onCloseHandler, onError]
+    [createReport, imageSrc, onCloseHandler, onError]
   );
 
   const onCloseDialogHandler = useCallback(

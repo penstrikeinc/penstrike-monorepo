@@ -6,15 +6,14 @@ import {
   Patch,
   Param,
   Delete,
-  UseInterceptors,
-  UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
 import { ReportsService } from './reports.service';
 import { CreateReportDto } from './dto/create-report.dto';
 import { UpdateReportDto } from './dto/update-report.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { CustomFileValidator } from 'src/attachments/attachments.validator';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('reports')
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
@@ -42,15 +41,5 @@ export class ReportsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.reportsService.remove(+id);
-  }
-
-  @Post('/upload')
-  @UseInterceptors(FileInterceptor('attachments'))
-  async upload(
-    @UploadedFile(new CustomFileValidator())
-    attachment: Express.Multer.File,
-  ) {
-    const userId = '';
-    return this.reportsService.upload({ userId, attachment });
   }
 }

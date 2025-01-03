@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -29,8 +30,8 @@ export class Attachment {
   @OneToMany(() => User, (user) => user.picture)
   profilePictures: User[];
 
-  @OneToMany(() => Report, (report) => report.reportFile)
-  reportFile: Report[];
+  @OneToOne(() => Report, (report) => report.reportFile)
+  reportFile: Report;
 
   @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })
   createdAt: string;

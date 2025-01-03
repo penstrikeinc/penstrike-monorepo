@@ -5,7 +5,7 @@ import { lighten } from '@mui/material';
 import { FC, Fragment, useCallback, useEffect, useState } from 'react';
 import { getCardColor, ICommentTree } from 'src/utils';
 import { IComment } from 'src/types';
-import { CommentManageCard } from 'src/components/cards';
+// import { CommentManageCard } from 'src/components/cards';
 
 export interface IOnEditHandler {
   (comment: IComment): void;
@@ -52,14 +52,14 @@ export const RenderCommentCardWithChild: FC<IRenderCommentProps> = (props) => {
   return (
     <Fragment key={comment.id}>
       <Grid key={comment.id} xs={12} item mb={2}>
-        <CommentManageCard
+        {/* <CommentManageCard
           comment={comment}
           onExpand={onExpandHandler}
           expanded={expanded}
           onEdit={onEdit}
           onReply={onReply}
           onRemove={onRemove}
-        />
+        /> */}
       </Grid>
 
       {comment.children && expanded && (
@@ -74,12 +74,12 @@ export const RenderCommentCardWithChild: FC<IRenderCommentProps> = (props) => {
                 opacity: 0.5,
               }}
             />
-            <GenerateCommentTree
+            {/* <GenerateCommentTree
               comments={comment.children}
               onEdit={onEdit}
               onReply={onReply}
               onRemove={onRemove}
-            />
+            /> */}
           </Box>
         </Fade>
       )}

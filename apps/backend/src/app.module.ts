@@ -9,6 +9,8 @@ import { FindingModule } from './finding/finding.module';
 import { CommentModule } from './comment/comment.module';
 import { ReportsModule } from './reports/reports.module';
 import { AttachmentsModule } from './attachments/attachments.module';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -39,6 +41,10 @@ import { AttachmentsModule } from './attachments/attachments.module';
     FindingModule,
     CommentModule,
     ReportsModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../../uploads'),
+      serveRoot: '/uploads', // todo: Serve files under /uploads
+    }),
   ],
   controllers: [],
   providers: [],

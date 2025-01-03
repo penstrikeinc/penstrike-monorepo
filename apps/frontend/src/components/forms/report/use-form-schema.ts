@@ -1,10 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { reportDefaultValues, reportSchema, TReport } from 'src/schemas';
+import { reportDefaultValues, reportSchemaFE, TReportFE } from 'src/schemas';
 
 export const useReportFormSchema = () => {
-  const methods = useForm<TReport>({
-    resolver: zodResolver(reportSchema),
+  const methods = useForm<TReportFE>({
+    resolver: zodResolver(reportSchemaFE),
     defaultValues: reportDefaultValues,
     mode: 'all',
   });

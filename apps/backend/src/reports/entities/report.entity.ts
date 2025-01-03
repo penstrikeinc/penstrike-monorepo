@@ -4,8 +4,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
-  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -15,14 +14,12 @@ export class Report {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToMany(() => Pentest, (pentest) => pentest.user)
+  @OneToOne(() => Pentest, (pentest) => pentest.report)
   @JoinColumn({ name: 'pentest_id' })
   pentest: Pentest;
 
-  @ManyToOne(() => Attachment, (attachment) => attachment.profilePictures, {
-    cascade: true,
-  })
-  @JoinColumn({ name: 'report_file' })
+  @OneToOne(() => Attachment, (attachment) => attachment.reportFile)
+  @JoinColumn({ name: 'report_file_id' })
   reportFile: Attachment;
 
   @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })

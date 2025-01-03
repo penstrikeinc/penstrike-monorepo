@@ -17,7 +17,7 @@ import { NEXT_PUBLIC_API_URL } from 'src/config-global';
 import { useGetDevice } from '../hooks';
 
 type TReportDest = {
-  destination: 'reports';
+  destination: 'reports' | 'attachments';
 };
 
 type TUserDest = {
@@ -33,7 +33,7 @@ interface IProps {
   sx?: SxProps;
   maxNumberOfFiles: number;
   disabled?: boolean;
-  onUploadComplete?: (src: IGenerateAwsS3URL[]) => void;
+  onUploadComplete: (src: IGenerateAwsS3URL) => void;
   asset: TDestination;
   buttonSize?: TButtonSize;
   buttonLabel?: string;
@@ -85,7 +85,7 @@ export const FileUpload: React.FC<IProps> = (props) => {
     headers: {
       authorization: `Bearer ${session}`,
     },
-    fieldName: 'attachments',
+    fieldName: 'file',
     endpoint,
   });
 
@@ -117,16 +117,9 @@ export const FileUpload: React.FC<IProps> = (props) => {
   });
 
   uppy.on('complete', (result) => {
-    if (onUploadComplete) {
-      const awsImages = result?.successful?.map((item) => {
-        const body = item.response?.body;
-        if (maxNumberOfFiles === 1) {
-          return body?.data as IGenerateAwsS3URL | undefined;
-        }
-        const data = body?.data as any;
-        return data[0]?.value;
-      });
-      onUploadComplete(awsImages ?? []);
+    const body = result?.successful?.[0]?.response?.body as IGenerateAwsS3URL | undefined;
+    if (body) {
+      onUploadComplete(body);
     }
     setOpenUploadModal(false);
   });

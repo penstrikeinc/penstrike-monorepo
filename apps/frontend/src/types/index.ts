@@ -6,4 +6,4 @@ export * from './pentest';
 export * from './finding';
 export * from './color-enum';
 export * from './comment';
-export * from './aws';
+export * from './attachment';

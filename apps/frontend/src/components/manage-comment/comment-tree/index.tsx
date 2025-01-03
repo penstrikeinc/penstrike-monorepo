@@ -1,12 +1,12 @@
 import { FC } from 'react';
-import { IGenerateCommentTree, RenderCommentCardWithChild } from '../render-card-with-child';
+import {} from '../render-card-with-child';
 
-export const CommentTree: FC<IGenerateCommentTree> = (props) => {
+export const CommentTree: FC<any> = (props) => {
   const { comments, onEdit, onReply, onRemove } = props;
 
   return (
     <>
-      {comments.map((comment) => (
+      {/* {comments.map((comment) => (
         <RenderCommentCardWithChild
           key={comment.id}
           comment={comment}
@@ -14,7 +14,7 @@ export const CommentTree: FC<IGenerateCommentTree> = (props) => {
           onReply={onReply}
           onRemove={onRemove}
         />
-      ))}
+      ))} */}
     </>
   );
 };

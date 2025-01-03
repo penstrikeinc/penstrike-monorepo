@@ -15,33 +15,39 @@ export class ReportsService {
     private readonly attachmentServices: AttachmentServices,
   ) {}
 
-  create(createReportDto: CreateReportDto) {
-    return 'This action adds a new report';
+  async create(createReportDto: CreateReportDto) {
+    const { pentest, attachment } = createReportDto;
+    const report = this.reportRepository.create({
+      pentest: { id: pentest },
+      reportFile: { id: attachment },
+    });
+    const result = await this.reportRepository.save(report);
+    return result;
   }
 
-  findAll() {
-    return `This action returns all reports`;
+  async findAll() {
+    const reports = await this.reportRepository.find({
+      relations: { pentest: true, reportFile: true },
+    });
+
+    return {
+      items: reports,
+      meta: {
+        count: reports.length,
+      },
+    };
   }
 
   findOne(id: number) {
     return `This action returns a #${id} report`;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(id: number, updateReportDto: UpdateReportDto) {
     return `This action updates a #${id} report`;
   }
 
   remove(id: number) {
     return `This action removes a #${id} report`;
-  }
-
-  async upload({
-    userId,
-    attachment,
-  }: {
-    userId: string;
-    attachment: Express.Multer.File;
-  }) {
-    return await this.attachmentServices.uploadUserAsset(userId, attachment);
   }
 }

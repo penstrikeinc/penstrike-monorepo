@@ -10,7 +10,7 @@ import { IComment } from 'src/types';
 import { LoadingButton } from '@mui/lab';
 import { FaX } from 'react-icons/fa6';
 import { generateCommentTree, ICommentTree } from 'src/utils';
-import { CommentTree } from '../manage-comment';
+// import { CommentTree } from '../manage-comment';
 
 interface IProps {
   findingId: string;
@@ -131,12 +131,12 @@ const CommentBox = (params: IProps) => {
   return (
     <Box>
       <Box>
-        <CommentTree
+        {/* <CommentTree
           comments={treeData}
           onEdit={handleEditData}
           onReply={handleReply}
           onRemove={handleRemove}
-        />
+        /> */}
       </Box>
 
       <Typography variant="body2" fontWeight="bold">
